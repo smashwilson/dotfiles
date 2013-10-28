@@ -1,7 +1,7 @@
 # shortcut to this dotfiles path is $BASH
 export BASH=$HOME/.dotfiles
 
-set +o globstar
+shopt -s globstar
 
 # use .localrc for SUPER SECRET CRAP that you don't
 # want in your public, versioned repo.
