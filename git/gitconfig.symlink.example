@@ -6,7 +6,7 @@
 [color]
 	ui = auto
 [push]
-	default = simple
+	default = upstream
 [alias]
 	lol = log --oneline --graph --decorate
   promote = !$BASH/bin/git-promote
