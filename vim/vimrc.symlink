@@ -2,3 +2,12 @@ syntax on
 
 " Wrap gitcommit file types at the appropriate length
 filetype indent plugin on
+
+set bg=dark
+set ts=2
+set expandtab
+set shiftwidth=2
+
+" Highlight trailing whitespace.
+:autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
+:match ExtraWhitespace /\s\+$\| \+\ze\t/
