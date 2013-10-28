@@ -9,7 +9,7 @@
 	default = upstream
 [alias]
 	lol = log --oneline --graph --decorate
-  promote = !$BASH/bin/git-promote
-  wtf     = !$BASH/bin/git-wtf
-  rank-contributers = !$BASH/bin/git-rank-contributers
+  promote = !$DOT/bin/git-promote
+  wtf     = !$DOT/bin/git-wtf
+  rank-contributers = !$DOT/bin/git-rank-contributers
   count   = !git shortlog -sn

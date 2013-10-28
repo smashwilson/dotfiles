@@ -1,5 +1,5 @@
-# shortcut to this dotfiles path is $BASH
-export BASH=$HOME/.dotfiles
+# shortcut to this dotfiles path is $DOT
+export DOT=$HOME/.dotfiles
 
 shopt -s globstar
 
@@ -11,7 +11,7 @@ then
 fi
 
 # all of our .bash files
-config_files=$BASH/**/*.bash
+config_files=$DOT/**/*.bash
 
 # load the path files first
 for file in $config_files ; do
