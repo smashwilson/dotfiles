@@ -1,6 +1,6 @@
 [user]
-	email = EMAILHERE
-	name = USERNAMEHERE
+	email = AUTHOREMAIL
+	name = AUTHORNAME
 [core]
 	excludesfile = ${HOME}/.gitignore
 [color]
