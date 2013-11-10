@@ -5,9 +5,13 @@ shopt -s globstar
 
 # use .localrc for SUPER SECRET CRAP that you don't
 # want in your public, versioned repo.
-if [[ -a ~/.localrc ]]
-then
+if [[ -a ~/.localrc ]]; then
   source ~/.localrc
+fi
+
+# Make sure that __git_ps1 is defined.
+if [[ -f /etc/bash_completion.d/git-prompt ]]; then
+  source /etc/bash_completion.d/git-prompt
 fi
 
 # all of our .bash files
