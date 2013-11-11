@@ -1,0 +1,13 @@
+#!/bin/bash
+#
+# Connect to the VPN at ${VPN_ENDPOINT}.
+
+if [[ -z ${VPN_ENDPOINT} ]]; then
+  echo "Please define \${VPN_ENDPOINT} in ${HOME}/.localrc."
+  exit 1
+fi
+
+sudo openconnect -s /etc/vpnc/vpnc-script \
+  --pid-file=/var/vpn/connection.pid \
+  --background \
+  ${VPN_ENDPOINT}

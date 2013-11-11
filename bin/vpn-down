@@ -1,0 +1,5 @@
+#!/bin/bash
+#
+# Disconnect from the VPN, if connected.
+
+sudo kill `cat /var/vpn/connection.pid`
