@@ -10,6 +10,9 @@ if [[ -a ~/.localrc ]]; then
 fi
 
 # Make sure that __git_ps1 is defined.
+if [[ -f /etc/bash_completion.d/git ]]; then
+  source /etc/bash_completion.d/git
+fi
 if [[ -f /etc/bash_completion.d/git-prompt ]]; then
   source /etc/bash_completion.d/git-prompt
 fi
