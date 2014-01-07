@@ -50,9 +50,9 @@ link_files () {
 install_dotfiles () {
   info 'installing dotfiles'
 
-  overwrite_all=${OVERWRITE_ALL:false}
-  backup_all=${BACKUP_ALL:false}
-  skip_all=${SKIP_ALL:false}
+  overwrite_all=${OVERWRITE_ALL:-false}
+  backup_all=${BACKUP_ALL:-false}
+  skip_all=${SKIP_ALL:-false}
 
   for source in `find $DOTFILES_ROOT -maxdepth 2 -name \*.symlink`
   do
