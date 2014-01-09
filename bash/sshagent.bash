@@ -15,6 +15,4 @@ if [ -n "$SSH_AUTH_SOCK" ]; then
       eval "$(ssh-agent -s)" > /dev/null
       echo "$SSH_AUTH_SOCK" > ~/.tmp/ssh-agent.env
   }
-else
-  echo "SSH agent not forwarded."
 fi
