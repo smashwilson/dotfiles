@@ -11,7 +11,10 @@ shopt -s histappend
 HISTSIZE=10000
 SAVEHIST=10000
 
-shopt -s checkwinsize
-shopt -u direxpand
+case "$OSTYPE" in
+  linux*)
+    shopt -s checkwinsize
+    shopt -u direxpand
+esac
 
 export EDITOR=vim

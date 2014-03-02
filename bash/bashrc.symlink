@@ -1,7 +1,11 @@
 # shortcut to this dotfiles path is $DOT
 export DOT=$HOME/.dotfiles
 
-shopt -s globstar
+case "${OSTYPE}" in
+  linux*)
+    shopt -s globstar
+    ;;
+esac
 
 # use .localrc for SUPER SECRET CRAP that you don't
 # want in your public, versioned repo.
