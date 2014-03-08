@@ -1,14 +1,14 @@
 [user]
-	email = AUTHOREMAIL
-	name = AUTHORNAME
+  email = AUTHOREMAIL
+  name = AUTHORNAME
 [core]
-	excludesfile = ${HOME}/.gitignore
+  excludesfile = ${HOME}/.gitignore
 [color]
-	ui = auto
+  ui = auto
 [push]
-	default = upstream
+  default = upstream
 [alias]
-	lol = log --oneline --graph --decorate
+  lol = log --oneline --graph --decorate
   promote = !$DOT/bin/git-promote
   wtf     = !$DOT/bin/git-wtf
   rank-contributers = !$DOT/bin/git-rank-contributers
