@@ -1,0 +1,9 @@
+#!/bin/sh
+#
+# Useful when you're working on a pull request that's just been merged.
+# Checkout master, pull in any new changes, and delete the now-merged
+# pull request branch.
+
+git checkout master
+git pull --prune
+git delete-local-merged
