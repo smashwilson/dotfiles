@@ -21,5 +21,10 @@ case "${OSTYPE}" in
             return 0
     }
     complete -F _complete_ssh_hosts ssh
+
+    # We also need to set up git autocompletion by hand.
+    for FILE in `brew --prefix`/etc/bash_completion.d/*; do
+      source $FILE
+    done
     ;;
 esac
