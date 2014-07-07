@@ -19,7 +19,8 @@ def log_me_in service_kind, **options
     provider: :rackspace,
     rackspace_username: creds['username'],
     rackspace_api_key: creds['apiKey'],
-    rackspace_region: options[:region] || :ord
+    rackspace_region: creds['region']
   }.merge!(options)
+  opts.delete(:provider) if service_kind.to_s =~ /Rackspace/
   service_kind.new(opts)
 end
