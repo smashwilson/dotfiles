@@ -1,0 +1,1 @@
+ssh -t azurefire.net 'sudo vim /var/pushbot/botdata/quotes'
