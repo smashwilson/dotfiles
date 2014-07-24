@@ -1,0 +1,6 @@
+#!/bin/bash
+#
+# Run music-manager.
+
+cd ${HOME}/code/music-manager
+bundle exec ruby music-manager.rb
