@@ -3,4 +3,4 @@
 # Run music-manager.
 
 cd ${HOME}/code/music-manager
-bundle exec ruby music-manager.rb
+bundle exec ruby music-manager.rb $*
