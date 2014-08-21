@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if test ! $(which rbenv)
 then
@@ -6,7 +6,7 @@ then
   git clone https://github.com/sstephenson/rbenv.git ${HOME}/.rbenv
 fi
 
-if test ! $(which ruby-build)
+if [ ! -d ${HOME}/.rbenv/plugins/ruby-build ]
 then
   echo "  Installing ruby-build for you."
   git clone https://github.com/sstephenson/ruby-build.git ${HOME}/.rbenv/plugins/ruby-build
