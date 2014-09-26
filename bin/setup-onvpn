@@ -1,0 +1,11 @@
+#!/bin/bash
+#
+# Toggle the active ssh config to be "config.onvpn".
+
+if [[ ! -f ${HOME}/.ssh/config.onvpn ]]; then
+  echo "No VPN-specific configuration found."
+  exit 1
+fi
+
+ln -f -s ${HOME}/.ssh/config.onvpn ${HOME}/.ssh/config
+echo "VPN-specific ssh configuration active."
