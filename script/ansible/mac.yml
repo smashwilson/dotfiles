@@ -1,0 +1,64 @@
+---
+# Set up homebrew and manage most things through homebrew packages.
+
+- name: Check for a preexisting homebrew installation.
+  command: brew -v
+  ignore_errors: true
+  register: brewcheck
+
+- name: Fetch the homebrew installation script
+  get_url:
+    url: https://raw.githubusercontent.com/Homebrew/install/master/install
+    dest: /tmp/install-homebrew
+    sha256sum: 85fbdee4fd54ca493b2ec4add3f36496447706f14bc30569bb73fa82be164ef3
+  register: homebrew-installer
+  when: brewcheck | failed
+
+- name: Install homebrew
+  command: ruby /tmp/install-homebrew
+  when: (brewcheck | failed) and (homebrew-installer | changed)
+
+- name: Homebrew packages
+  homebrew: name={{ item }} state=present
+  with_items:
+  - autoconf
+  - bash-completion
+  - coreutils
+  - readline
+  - openssl
+  - gettext
+  - dos2unix
+  - pcre
+  - pkg-config
+  - watch
+  - watchman
+  - cunit
+  - ragel
+  - lemon
+  - gmp
+  - gdbm
+  - cowsay
+  - ssh-copy-id
+  - git
+  - hub
+  - mercurial
+  - sqlite
+  - redis
+  - boot2docker
+  - docker
+  - rbenv
+  - ruby-build
+  - python
+  - node
+  - go
+  - ghc
+  - cabal-install
+
+- name: Ruby gems
+  gem: name={{ item }} state=latest
+  with_items: ruby_gems
+
+- name: Python packages
+  pip: name={{ item }} state=latest
+  sudo: true
+  with_items: python_packages

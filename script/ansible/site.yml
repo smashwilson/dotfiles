@@ -1,0 +1,10 @@
+---
+- hosts: all
+  connection: local
+  vars_files:
+  - vars.yml
+  tasks:
+
+  - name: Mac OS X
+    include: mac.yml
+    when: ansible_os_family == 'Darwin'

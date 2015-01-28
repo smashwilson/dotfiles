@@ -8,6 +8,10 @@ set -e
 
 echo ''
 
+has () {
+  which $1 >/dev/null 2>&1
+}
+
 info () {
   printf "  [ \033[00;34m..\033[0m ] $1"
 }
@@ -27,8 +31,7 @@ fail () {
 }
 
 setup_gitconfig () {
-  if ! [ -f git/gitconfig.symlink ]
-  then
+  if ! [ -f git/gitconfig.symlink ]; then
     info 'setup gitconfig'
 
     user ' - What is your github author name?'
@@ -117,5 +120,26 @@ install_dotfiles () {
 setup_gitconfig
 install_dotfiles
 
-echo ''
-echo '  All installed!'
+# Install Ansible if necessary.
+if ! has ansible-playbook; then
+  info "Installing Ansible."
+  if has apt-get; then
+    info "... from aptitude."
+    sudo apt-get install -y ansible
+  elif has pip; then
+    info "... from pip."
+    pip install ansible
+  elif has easy_install; then
+    info "... from pip by way of easy_install."
+    sudo easy_install pip
+    pip install ansible
+  else
+    fail "I don't know how to install Ansible! Install it manually and re-run."
+  fi
+  success "Ansible has been installed."
+fi
+
+info "Updating packages with Ansible."
+echo ""
+ansible-playbook -i localhost, ${DOTFILES_ROOT}/script/ansible/site.yml --ask-sudo-pass
+success "All done!"

@@ -1,0 +1,13 @@
+---
+# Variables for things that are common across OS families, like Ruby gems.
+
+ruby_gems:
+- pry
+- bundler
+- httparty
+
+python_packages:
+- virtualenv
+- virtualenvwrapper
+- supernova
+- requests
