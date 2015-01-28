@@ -1,0 +1,7 @@
+#!/bin/bash
+
+DOCKER='sudo docker'
+which boot2docker >/dev/null 2>&1 && DOCKER='docker'
+
+echo "Cleaning all dangling images."
+${DOCKER} rmi $(${DOCKER} images -f 'dangling=true' -q)
