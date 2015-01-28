@@ -5,3 +5,4 @@
 *.rbc
 .venv/*
 .pryrc
+test.sh
