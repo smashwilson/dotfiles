@@ -9,6 +9,8 @@ case "${OSTYPE}" in
     if [[ -f $(brew --prefix)/etc/bash_completion ]]; then
       source $(brew --prefix)/etc/bash_completion
     fi
+
+    export RBENV_ROOT=/usr/local/var/rbenv
     ;;
 esac
 
