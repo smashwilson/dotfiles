@@ -54,6 +54,9 @@
   - ghc
   - cabal-install
 
+- name: Install Ruby through rbenv
+  command: rbenv install {{ ruby_version }} creates=/usr/local/var/rbenv/versions/{{ ruby_version }}/bin/ruby
+
 - name: Ruby gems
   gem: name={{ item }} state=latest
   with_items: ruby_gems
