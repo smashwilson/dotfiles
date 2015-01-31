@@ -1,0 +1,10 @@
+---
+# Install must-have packages for Python.
+
+- name: must-have Python packages
+  pip: name={{ item }} state=latest
+  with_items: python_packages
+  sudo: yes
+
+- name: create the virtualenvwrapper home
+  file: dest={{ home }}/.venv state=directory mode=0755
