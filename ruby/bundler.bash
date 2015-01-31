@@ -1,3 +1,3 @@
-# Use Sublime Text as an editor for "bundle open".
+# Use Atom as an editor for "bundle open".
 
-export BUNDLER_EDITOR=subl
+export BUNDLER_EDITOR=atom
