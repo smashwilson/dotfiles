@@ -4,35 +4,43 @@
 - name: prepare base variables
   set_fact:
     rbenv_root: "{{ home }}/.rbenv"
+  tags: ["ruby"]
 
 - name: prepare the environment
   set_fact:
     rbenv_env:
       RBENV_ROOT: "{{ rbenv_root }}"
       PATH: "{{ ansible_env.PATH }}:{{ rbenv_root }}/shims:{{ rbenv_root }}/bin"
+  tags: ["ruby"]
 
 - name: install rbenv
   git: repo=https://github.com/sstephenson/rbenv.git
        dest={{ rbenv_root }}
+  tags: ["ruby"]
 
 - name: install ruby-build
   git: repo=https://github.com/sstephenson/ruby-build.git
        dest={{ rbenv_root }}/plugins/ruby-build
+  tags: ["ruby"]
 
 - name: build ruby {{ ruby_version }}
   command: rbenv install {{ ruby_version }}
            creates={{ rbenv_root }}/versions/{{ ruby_version }}/bin/ruby
   environment: rbenv_env
+  tags: ["ruby"]
 
 - name: set the global ruby version to {{ ruby_version }}
   command: rbenv global {{ ruby_version }}
   environment: rbenv_env
+  tags: ["ruby"]
 
 - name: rehash to pick up changes
   command: rbenv rehash
   environment: rbenv_env
+  tags: ["ruby"]
 
 - name: install must-have gems
   gem: name={{ item }} state=latest
   with_items: ruby_gems
   environment: rbenv_env
+  tags: ["ruby"]

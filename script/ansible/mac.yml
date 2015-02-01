@@ -19,7 +19,7 @@
   when: (brewcheck | failed) and (homebrew-installer | changed)
 
 - name: Homebrew packages
-  homebrew: name={{ item }} state=present
+  homebrew: name={{ item }} state=latest
   with_items:
   - autoconf
   - bash-completion
@@ -46,25 +46,36 @@
   - redis
   - boot2docker
   - docker
-  - rbenv
-  - ruby-build
-  - python
   - node
   - go
   - ghc
   - cabal-install
 
+- name: Ruby homebrew packages
+  homebrew: name={{ item }} state=latest
+  with_items:
+  - rbenv
+  - ruby-build
+  tags: ["ruby"]
+
 - name: Install Ruby through rbenv
   command: rbenv install {{ ruby_version }} creates=/usr/local/var/rbenv/versions/{{ ruby_version }}/bin/ruby
+  tags: ["ruby"]
 
 - name: Ruby gems
   gem: name={{ item }} state=latest
   with_items: ruby_gems
+  tags: ["ruby"]
+
+- name: Python homebrew package
+  homebrew: name=python state=latest
+  tags: ["python"]
 
 - name: Python packages
   pip: name={{ item }} state=latest
   sudo: true
   with_items: python_packages
+  tags: ["python"]
 
 - name: Rust
   include: reusable/rust.yml sha_cmd=shasum sha_args='-a 256'
