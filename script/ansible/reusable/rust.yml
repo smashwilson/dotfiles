@@ -1,0 +1,27 @@
+---
+# For some reason, curl verifies the CA, but Ansible's get_url module does not, and I'll be damned
+# if I'm going to disable host verification for a script I'm about to pipe into a sudo shell.
+#
+# I blame Cloudflare somehow.
+
+- name: Installer for Rust and Cabal
+  command: curl https://static.rust-lang.org/rustup.sh -o /tmp/install-rust
+  tags: ["rust"]
+
+- name: Populate the checksum file
+  template: src=templates/install-rust-sha256.j2 dest=/tmp/install-rust-sha256
+  tags: ["rust"]
+
+- name: Verify the Rust installer signature
+  command: "{{ sha_cmd }} -c -w {{ sha_args }} /tmp/install-rust-sha256"
+  tags: ["rust"]
+
+- name: Install the latest Rust nightly
+  command: sh /tmp/install-rust
+  sudo: true
+  tags: ["rust"]
+
+- name: Install the latest Rust nightly
+  command: sh /tmp/install-rust
+  sudo: true
+  tags: ["rust"]

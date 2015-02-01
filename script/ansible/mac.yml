@@ -66,20 +66,5 @@
   sudo: true
   with_items: python_packages
 
-# For some reason, curl accepts the certificate, but Ansible does not.
-- name: Installer for Rust and Cabal
-  command: curl https://static.rust-lang.org/rustup.sh -o /tmp/install-rust
-  tags: ["rust"]
-
-- name: Populate the checksum file
-  copy: src=files/install-rust-sha256 dest=/tmp/install-rust-sha256
-  tags: ["rust"]
-
-- name: Verify the Rust installer signature
-  command: shasum -c -w -a 256 /tmp/install-rust-sha256
-  tags: ["rust"]
-
-- name: Install the latest Rust nightly
-  command: sh /tmp/install-rust
-  sudo: true
-  tags: ["rust"]
+- name: Rust
+  include: reusable/rust.yml sha_cmd=shasum sha_args='-a 256'

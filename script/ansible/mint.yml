@@ -27,3 +27,6 @@
 
 - name: Python
   include: reusable/python.yml
+
+- name: Rust
+  include: reusable/rust.yml sha_cmd=sha256sum sha_args=
