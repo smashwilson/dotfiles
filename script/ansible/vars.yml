@@ -13,3 +13,6 @@ python_packages:
 - virtualenvwrapper
 - supernova
 - requests
+
+# If this has changed: verify the new script version, and modify.
+rust_installer_sha256: f567f0f18329472d837201205ff372ebeff142cf024597e97f04076293a91b8b

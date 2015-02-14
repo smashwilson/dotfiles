@@ -1,0 +1,32 @@
+---
+# Use apt to install things.
+
+- name: Docker
+  include: reusable/docker.yml
+
+- name: General aptitude requirements
+  apt: name={{ item }} state=latest update_cache=yes cache_valid_time=3600
+  with_items:
+  - build-essential
+  - libyaml-dev
+  - libssl-dev
+  - libreadline-dev
+  - libsqlite3-dev
+  - libxml2-dev
+  - libxslt1-dev
+  - zlib1g-dev
+  - sqlite3
+  - python
+  - python-pip
+  - python3
+  - python3-pip
+  sudo: yes
+
+- name: Ruby
+  include: reusable/rbenv.yml
+
+- name: Python
+  include: reusable/python.yml
+
+- name: Rust
+  include: reusable/rust.yml sha_cmd=sha256sum sha_args=
