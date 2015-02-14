@@ -20,8 +20,3 @@
   command: sh /tmp/install-rust
   sudo: true
   tags: ["rust"]
-
-- name: Install the latest Rust nightly
-  command: sh /tmp/install-rust
-  sudo: true
-  tags: ["rust"]
