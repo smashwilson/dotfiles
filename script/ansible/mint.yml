@@ -7,13 +7,19 @@
 - name: General aptitude requirements
   apt: name={{ item }} state=latest update_cache=yes cache_valid_time=3600
   with_items:
+  - autoconf
+  - bison
   - build-essential
   - libyaml-dev
   - libssl-dev
-  - libreadline-dev
+  - libreadline6-dev
   - libsqlite3-dev
   - libxml2-dev
   - libxslt1-dev
+  - libncurses5-dev
+  - libffi-dev
+  - libgdbm3
+  - libgdbm-dev
   - zlib1g-dev
   - sqlite3
   - python
