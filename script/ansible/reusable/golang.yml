@@ -1,4 +1,8 @@
 ---
+- name: dearchive gvm's git repo
+  shell: '[ -d {{ home }}/.gvm/git.bak ] && mv {{ home }}/.gvm/git.bak {{ home }}/.gvm/.git || true'
+  tags: ["go"]
+
 - name: clone gvm
   git: dest={{ home }}/.gvm repo=https://github.com/moovweb/gvm.git
   tags: ["go"]
