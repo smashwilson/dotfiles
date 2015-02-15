@@ -1,0 +1,13 @@
+---
+- name: manual nvm install
+  git: dest={{ home }}/.nvm repo=https://github.com/creationix/nvm.git version=v{{ nvm_version }}
+  tags: ["nodejs"]
+
+- name: install the node version
+  shell: . {{ home }}/.nvm/nvm.sh && nvm install {{ node_version }} creates={{ home }}/.nvm/{{ node_version }}
+  tags: ["nodejs"]
+
+- name: set the default node version
+  shell: . {{ home }}/.nvm/nvm.sh && nvm alias default {{ node_version }}
+  tags: ["nodejs"]
+
