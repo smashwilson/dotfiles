@@ -13,8 +13,10 @@
 
 - name: install go
   shell: . {{ home }}/.gvm/scripts/gvm && gvm install go{{ golang_version }}
+         executable=/bin/bash
   tags: ["go"]
 
 - name: set the default version of go
   shell: . {{ home }}/.gvm/scripts/gvm && gvm use go{{ golang_version }} --default
+         executable=/bin/bash
   tags: ["go"]
