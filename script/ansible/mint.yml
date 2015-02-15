@@ -10,6 +10,9 @@
   - autoconf
   - bison
   - build-essential
+  - binutils
+  - gcc
+  - mercurial
   - libyaml-dev
   - libssl-dev
   - libreadline6-dev
@@ -26,6 +29,9 @@
   - python-pip
   - python3
   - python3-pip
+  - make
+  - libgnome-keyring-dev
+  - fakeroot
   sudo: yes
 
 - name: Ruby
@@ -36,6 +42,9 @@
 
 - name: Node.js
   include: reusable/nvm.yml
+
+- name: Go
+  include: reusable/golang.yml
 
 - name: Rust
   include: reusable/rust.yml sha_cmd=sha256sum sha_args=
