@@ -1,5 +1,4 @@
-# gvm config
-[ -s "$HOME/.gvm/scripts/gvm" ] && source "$HOME/.gvm/scripts/gvm"
+#!/bin/bash
 
 export GOPATH=${HOME}/go
 export GOROOT=`go env GOROOT`
