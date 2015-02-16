@@ -48,3 +48,6 @@
 
 - name: Rust
   include: reusable/rust.yml sha_cmd=sha256sum sha_args=
+
+- name: Spotify
+  include: reusable/spotify.yml
