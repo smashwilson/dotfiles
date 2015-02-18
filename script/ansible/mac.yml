@@ -46,7 +46,6 @@
   - redis
   - boot2docker
   - docker
-  - node
   - go
   - ghc
   - cabal-install
@@ -76,6 +75,25 @@
   sudo: true
   with_items: python_packages
   tags: ["python"]
+
+- name: Node.js package
+  homebrew: name=nvm state=latest
+  tags: ["nodejs"]
+
+- name: nvm storage directory
+  file: path={{ home }}/.nvm state=directory mode=0755
+  tags: ["nodejs"]
+
+- name: Node through nvm
+  shell: source $(brew --prefix nvm)/nvm.sh && nvm install {{ node_version }}
+         creates={{ home }}/.nvm/{{ node_version }}
+         executable=/bin/bash
+  tags: ["nodejs"]
+
+- name: default Node
+  shell: source $(brew --prefix nvm)/nvm.sh && nvm alias default {{ node_version }}
+         executable=/bin/bash
+  tags: ["nodejs"]
 
 - name: Rust
   include: reusable/rust.yml sha_cmd=shasum sha_args='-a 256'
