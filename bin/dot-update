@@ -1,0 +1,13 @@
+#!/bin/bash
+#
+# Quickly update some or all of the contents of this repository.
+
+cd ${DOT}
+
+if [ $(git rev-parse --symbolic-full-name HEAD) = "refs/heads/master" ]; then
+  git fetch origin
+  git merge --ff-only origin/master
+else
+  echo "not updating .dotfiles: currently on non-master branch"
+  exit 1
+fi
