@@ -39,7 +39,11 @@ setup_gitconfig () {
     user ' - What is your github author email?'
     read -e GIT_AUTHOREMAIL
 
-    sed -e "s/AUTHORNAME/${GIT_AUTHORNAME}/g" -e "s/AUTHOREMAIL/${GIT_AUTHOREMAIL}/g" git/gitconfig.symlink.example > git/gitconfig.symlink
+    sed \
+      -e "s/AUTHORNAME/${GIT_AUTHORNAME}/g" \
+      -e "s/AUTHOREMAIL/${GIT_AUTHOREMAIL}/g" \
+      -e "s/INSERTHOME/${HOME}/g" \
+      git/gitconfig.symlink.example > git/gitconfig.symlink
 
     success 'gitconfig'
   fi
