@@ -13,7 +13,7 @@ has () {
 }
 
 info () {
-  printf "  [ \033[00;34m..\033[0m ] $1"
+  printf "  [ \033[00;34m..\033[0m ] $1\n"
 }
 
 user () {
@@ -32,7 +32,7 @@ fail () {
 
 setup_gitconfig () {
   if ! [ -f git/gitconfig.symlink ]; then
-    info 'setup gitconfig'
+    info "setup gitconfig"
 
     user ' - What is your github author name?'
     read -e git_authorname
@@ -51,7 +51,7 @@ link_files () {
 }
 
 install_dotfiles () {
-  info 'installing dotfiles'
+  info "installing dotfiles"
 
   overwrite_all=${OVERWRITE_ALL:-false}
   backup_all=${BACKUP_ALL:-false}
@@ -142,6 +142,5 @@ if ! has ansible-playbook; then
 fi
 
 info "Updating packages with Ansible."
-echo ""
 ansible-playbook -i localhost, ${DOTFILES_ROOT}/script/ansible/site.yml --ask-sudo-pass
 success "All done!"
