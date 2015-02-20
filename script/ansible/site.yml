@@ -5,10 +5,6 @@
   - vars.yml
   tasks:
 
-  - name: set the home fact
-    set_fact:
-      home: "{{ lookup('env', 'HOME') }}"
-
   - name: Mac OS X
     include: mac.yml
     when: ansible_os_family == 'Darwin'
