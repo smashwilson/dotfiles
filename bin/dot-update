@@ -20,7 +20,6 @@ ansible()
   local ARGS=$1
 
   exec ansible-playbook -i localhost, ${DOT}/script/ansible/site.yml ${ARGS}
-  # --ask-sudo-pass
 }
 
 if [ $# = "0" ]; then
