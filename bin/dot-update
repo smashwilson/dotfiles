@@ -15,10 +15,27 @@ dotfiles()
   fi
 }
 
+ansible()
+{
+  local ARGS=$1
+
+  exec ansible-playbook -i localhost, ${DOT}/script/ansible/site.yml ${ARGS}
+  # --ask-sudo-pass
+}
+
 if [ $# = "0" ]; then
   dotfiles
 else
   for ARG in $*; do
-    echo ${ARG}
+    case ${ARG} in
+      ruby|python|nodejs|go|rust)
+        echo "Updating: ${ARG}"
+        ansible "--tags ${ARG} --ask-sudo-pass"
+        ;;
+      *)
+        echo "Unrecognized component: ${ARG}"
+        exit 1
+        ;;
+    esac
   done
 fi
