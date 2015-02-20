@@ -35,11 +35,11 @@ setup_gitconfig () {
     info "setup gitconfig"
 
     user ' - What is your github author name?'
-    read -e git_authorname
+    read -e GIT_AUTHORNAME
     user ' - What is your github author email?'
-    read -e git_authoremail
+    read -e GIT_AUTHOREMAIL
 
-    sed -e "s/AUTHORNAME/$git_authorname/g" -e "s/AUTHOREMAIL/$git_authoremail/g" git/gitconfig.symlink.example > git/gitconfig.symlink
+    sed -e "s/AUTHORNAME/${GIT_AUTHORNAME}/g" -e "s/AUTHOREMAIL/${GIT_AUTHOREMAIL}/g" git/gitconfig.symlink.example > git/gitconfig.symlink
 
     success 'gitconfig'
   fi
@@ -53,68 +53,72 @@ link_files () {
 install_dotfiles () {
   info "installing dotfiles"
 
-  overwrite_all=${OVERWRITE_ALL:-false}
-  backup_all=${BACKUP_ALL:-false}
-  skip_all=${SKIP_ALL:-false}
+  local OVERWRITE_ALL=${OVERWRITE_ALL:-false}
+  local BACKUP_ALL=${BACKUP_ALL:-false}
+  local SKIP_ALL=${SKIP_ALL:-false}
 
-  for source in `find $DOTFILES_ROOT -maxdepth 2 -name \*.symlink`
-  do
-    dest="$HOME/.`basename \"${source%.*}\"`"
+  for SOURCE in $(find $DOTFILES_ROOT -maxdepth 2 -name \*.symlink); do
+    DEST="$HOME/.`basename \"${SOURCE%.*}\"`"
 
-    if [ -f $dest ] || [ -d $dest ]; then
-      LINK_TARGET=$(readlink $dest || echo $dest)
-      if [ $LINK_TARGET = $source ]; then
-        info "$dest is already linked."
+    if [ -f $DEST ] || [ -d $DEST ]; then
+      LINK_TARGET=$(readlink $DEST || echo $DEST)
+      if [ $LINK_TARGET = $SOURCE ]; then
+        info "$DEST is already linked."
       else
-        overwrite=false
-        backup=false
-        skip=false
+        local OVERWRITE="false"
+        local BACKUP="false"
+        local SKIP="false"
 
-        if [ "$overwrite_all" == "false" ] && [ "$backup_all" == "false" ] && [ "$skip_all" == "false" ]
-        then
-          user "File already exists: `basename $source`, what do you want to do? [s]kip, [S]kip all, [o]verwrite, [O]verwrite all, [b]ackup, [B]ackup all?"
-          read -n 1 action
+        if [ "$OVERWRITE_ALL" == "false" ] && [ "$BACKUP_ALL" == "false" ] && [ "$SKIP_ALL" == "false" ]; then
+          user "File already exists: `basename $SOURCE`, what do you want to do? [s]kip, [S]kip all, [o]verwrite, [O]verwrite all, [b]ackup, [B]ackup all?"
+          read -n 1 ACTION
 
-          case "$action" in
-            o )
-              overwrite=true;;
-            O )
-              overwrite_all=true;;
-            b )
-              backup=true;;
-            B )
-              backup_all=true;;
-            s )
-              skip=true;;
-            S )
-              skip_all=true;;
-            * )
+          case "$ACTION" in
+            o)
+              OVERWRITE="true"
+              ;;
+            O)
+              OVERWRITE_ALL="true"
+              ;;
+            b)
+              BACKUP="true"
+              ;;
+            B)
+              BACKUP_ALL="true"
+              ;;
+            s)
+              SKIP="true"
+              ;;
+            S)
+              SKIP_ALL="true"
+              ;;
+            *)
               ;;
           esac
         fi
 
-        if [ "$overwrite" == "true" ] || [ "$overwrite_all" == "true" ]
+        if [ "$OVERWRITE" == "true" ] || [ "$OVERWRITE_ALL" == "true" ]
         then
-          rm -rf $dest
-          success "removed $dest"
+          rm -rf $DEST
+          success "removed $DEST"
         fi
 
-        if [ "$backup" == "true" ] || [ "$backup_all" == "true" ]
+        if [ "$BACKUP" == "true" ] || [ "$BACKUP_ALL" == "true" ]
         then
-          mv $dest $dest\.backup
-          success "moved $dest to $dest.backup"
+          mv $DEST $DEST\.backup
+          success "moved $DEST to $DEST.backup"
         fi
 
-        if [ "$skip" == "false" ] && [ "$skip_all" == "false" ]
+        if [ "$SKIP" == "false" ] && [ "$SKIP_ALL" == "false" ]
         then
-          link_files $source $dest
+          link_files $SOURCE $DEST
         else
-          success "skipped $source"
+          success "skipped $SOURCE"
         fi
       fi
 
     else
-      link_files $source $dest
+      link_files $SOURCE $DEST
     fi
 
   done
