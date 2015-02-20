@@ -63,8 +63,9 @@ install_dotfiles () {
 
     if [ -f $dest ] || [ -d $dest ]; then
       LINK_TARGET=$(readlink $dest || echo $dest)
-      if [ ! $LINK_TARGET = ${SOURCE} ]; then
-
+      if [ $LINK_TARGET = $source ]; then
+        info "$dest is already linked."
+      else
         overwrite=false
         backup=false
         skip=false
