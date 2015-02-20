@@ -1,1 +1,1 @@
-export WORKON_HOME=~/.venvs
+export WORKON_HOME=~/.venv
