@@ -70,6 +70,10 @@
   homebrew: name=python state=latest
   tags: ["python"]
 
+- name: create the virtualenvwrapper home
+  file: dest={{ venv_home }} state=directory mode=0755
+  tags: ["python"]
+
 - name: Python packages
   pip: name={{ item }} state=latest
   sudo: true
