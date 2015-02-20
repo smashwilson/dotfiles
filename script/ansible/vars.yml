@@ -1,4 +1,7 @@
 ---
+# Home directory.
+home: "{{ lookup('env', 'HOME') }}"
+
 # Variables for things that are common across OS families, like Ruby gems.
 
 ruby_version: 2.2.0
