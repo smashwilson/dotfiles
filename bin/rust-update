@@ -1,9 +1,0 @@
-#!/bin/bash
-#
-# Update Rust to the latest nightly.
-
-exec ansible-playbook \
-  -i localhost, \
-  ${DOT}/script/ansible/site.yml \
-  --ask-sudo-pass \
-  --tags rust
