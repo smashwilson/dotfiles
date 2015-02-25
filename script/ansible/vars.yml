@@ -16,6 +16,7 @@ python_packages:
 - virtualenvwrapper
 - supernova
 - requests
+- flake8
 
 # Home directory for virtualenvs
 venv_home: "{{ home }}/.venv"
