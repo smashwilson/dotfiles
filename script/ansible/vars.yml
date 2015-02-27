@@ -17,6 +17,7 @@ python_packages:
 - supernova
 - requests
 - flake8
+- cookiecutter
 
 # Home directory for virtualenvs
 venv_home: "{{ home }}/.venv"
