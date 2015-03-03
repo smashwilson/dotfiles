@@ -1,7 +1,0 @@
-#!/bin/bash
-#
-# Fetch pull requests against the current repository.
-
-REMOTE=${1:-origin}
-
-git fetch ${REMOTE} "+refs/pull/*/head:refs/remotes/${REMOTE}/pr/*"
