@@ -67,7 +67,10 @@
   tags: ["ruby"]
 
 - name: Python homebrew package
-  homebrew: name=python state=latest
+  homebrew: name={{ item }} state=latest
+  with_items:
+  - python
+  - python3
   tags: ["python"]
 
 - name: create the virtualenvwrapper home
