@@ -5,10 +5,10 @@
 set -euo pipefail
 IFS=$'\n\r'
 
-DOCKER='sudo docker'
-which boot2docker >/dev/null 2>&1 && DOCKER='docker'
+SUDO='sudo'
+which boot2docker >/dev/null 2>&1 && SUDO=''
 
 echo "Cleaning all dangling images."
 
-IMAGES=$(${DOCKER} images -f 'dangling=true' -q)
-[ -n "${IMAGES}" ] && ${DOCKER} rmi ${IMAGES}
+IMAGES=$(${SUDO} docker images -f 'dangling=true' -q)
+[ -n "${IMAGES}" ] && ${SUDO} docker rmi ${IMAGES}

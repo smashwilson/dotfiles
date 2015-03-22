@@ -5,22 +5,22 @@
 set -euo pipefail
 IFS=$'\n\r'
 
-DOCKER='sudo docker'
-which boot2docker >/dev/null 2>&1 && DOCKER='docker'
+SUDO='sudo'
+which boot2docker >/dev/null 2>&1 && SUDO=''
 
 CONTAINER=${1-}
 
 if [ -n "${CONTAINER}" ]; then
   echo "Cleaning container ${CONTAINER}."
 
-  ${DOCKER} stop ${CONTAINER}
-  ${DOCKER} rm ${CONTAINER}
+  ${SUDO} docker stop ${CONTAINER}
+  ${SUDO} docker rm ${CONTAINER}
 else
   echo "Cleaning all containers."
 
-  RUNNING=$(${DOCKER} ps -q)
-  [ -n "${RUNNING}" ] && ${DOCKER} stop ${RUNNING}
+  RUNNING=$(${SUDO} docker ps -q)
+  [ -n "${RUNNING}" ] && ${SUDO} docker stop ${RUNNING}
 
-  ALL=$(${DOCKER} ps -qa)
-  [ -n "${ALL}" ] && ${DOCKER} rm ${ALL}
+  ALL=$(${SUDO} docker ps -qa)
+  [ -n "${ALL}" ] && ${SUDO} docker rm ${ALL}
 fi
