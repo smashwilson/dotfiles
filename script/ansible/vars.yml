@@ -18,7 +18,6 @@ python_packages:
 - requests
 - flake8
 - cookiecutter
-- docker-compose
 
 # Home directory for virtualenvs
 venv_home: "{{ home }}/.venv"
