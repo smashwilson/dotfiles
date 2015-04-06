@@ -23,7 +23,7 @@ python_packages:
 venv_home: "{{ home }}/.venv"
 
 # If this has changed: verify the new script version, and modify.
-rust_installer_sha256: f567f0f18329472d837201205ff372ebeff142cf024597e97f04076293a91b8b
+rust_installer_sha256: a9b239029118c3fb5c89f6e5b0daf5119a3953a9011a7b53b1f75f78fd9cde34
 
 nvm_version: 0.23.3
 
