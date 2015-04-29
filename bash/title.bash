@@ -6,7 +6,7 @@ function title() {
     echo -en "\ek$a:$1\e\\" # screen title (in ^A")
     ;;
   xterm*|rxvt)
-    echo -en "\e]2;$1\a" # plain xterm title ($3 for pwd)
+    echo -en "\033]0;$@\007" # plain xterm title ($3 for pwd)
     ;;
   esac
 }
