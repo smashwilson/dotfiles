@@ -18,6 +18,7 @@ python_packages:
 - requests
 - flake8
 - cookiecutter
+- jedi
 
 # Home directory for virtualenvs
 venv_home: "{{ home }}/.venv"
