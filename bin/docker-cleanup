@@ -6,7 +6,11 @@ set -euo pipefail
 IFS=$'\n\r'
 
 SUDO='sudo'
-which boot2docker >/dev/null 2>&1 && SUDO=''
+case "${OSTYPE}" in
+  darwin*)
+    SUDO=''
+    ;;
+esac
 
 CONTAINER=${1-}
 
