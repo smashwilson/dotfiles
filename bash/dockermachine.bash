@@ -1,5 +1,50 @@
 # Automatically shellinit docker-machine if it's up.
 
+function dmachine() {
+  local MACHINENAME=$1
+  local CREATE=${2:-}
+  local QUIET=${3:-}
+
+  local CONFIG="$(docker-machine env ${MACHINENAME} 2>/dev/null)"
+
+  if [ -n "${CONFIG}" ]; then
+    eval "${CONFIG}"
+
+    local ETCHOSTNAME="docker${MACHINENAME}"
+    local MACHINEIP=$(docker-machine ip ${MACHINENAME})
+
+    [ -z "${QUIET}" ] && echo "dmachine: adding /etc/hosts entry ${ETCHOSTNAME} -> ${MACHINEIP}"
+
+    sudo add-etc-host "${ETCHOSTNAME}" "${MACHINEIP}"
+  else
+    if [ -n "${CREATE}" ]; then
+      local STATUS="$(docker-machine status ${MACHINENAME} 2>/dev/null)"
+
+      case "${STATUS}" in
+        Stopped)
+          [ -z "${QUIET}" ] && echo "dmachine: starting machine ${MACHINENAME}."
+
+          docker-machine start ${MACHINENAME}
+          ;;
+        "")
+          [ -z "${QUIET}" ] && echo "dmachine: creating machine ${MACHINENAME}."
+
+          docker-machine create -d virtualbox ${MACHINENAME}
+          ;;
+        *)
+          echo "dmachine: unfamiliar machine status '${STATUS}' for ${MACHINENAME}." >&2
+          return 1
+          ;;
+      esac
+
+      dmachine "${MACHINENAME}" "" "${QUIET}"
+    else
+      [ -z "${QUIET}" ] && echo "dmachine: ${MACHINENAME} does not exist." >&2
+      return 1
+    fi
+  fi
+}
+
 # If docker-machine is running a box called "dev", exec its environment setup.
 function machineme() {
   ORIGINAL_CONFIG=$(readlink ${HOME}/.ssh/config)
