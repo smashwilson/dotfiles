@@ -44,7 +44,7 @@ function dmachine() {
 
       dmachine "${MACHINENAME}" "" "${QUIET}"
     else
-      [ -z "${QUIET}" ] && echo "dmachine: ${MACHINENAME} does not exist." >&2
+      [ -z "${QUIET}" ] && echo "dmachine: ${MACHINENAME} is not started or does not exist." >&2
       return 1
     fi
   fi
