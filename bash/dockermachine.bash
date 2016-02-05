@@ -55,7 +55,7 @@ function machineme() {
   ORIGINAL_CONFIG=$(readlink ${HOME}/.ssh/config)
   setup-offvpn 1>/dev/null
 
-  eval "$(docker-machine env dev)"
+  dmachine dev "" quiet
 
   ln -f -s ${ORIGINAL_CONFIG} ${HOME}/.ssh/config
 }
