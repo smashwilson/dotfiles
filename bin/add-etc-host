@@ -11,14 +11,9 @@ if hostname.nil? or hostip.nil?
   exit 1
 end
 
-unless File.writable?("/etc/hosts")
-  $stderr.puts "#{$0} must be run sudo."
-  exit 1
-end
-
 lines = File.readlines("/etc/hosts", encoding: "utf-8")
 pattern = /^ *(?:[0-9]+\.){3}[0-9]+ +#{hostname}/
-entry = "#{hostip} #{hostname}"
+entry = "#{hostip} #{hostname}\n"
 found = false
 
 modified = lines.map do |line|
@@ -32,4 +27,11 @@ end
 
 modified << entry unless found
 
-File.write("/etc/hosts", modified.join, encoding: "utf-8")
+if modified.join != lines.join
+  if File.writable?("/etc/hosts")
+    File.write("/etc/hosts", modified.join, encoding: "utf-8")
+  else
+    # Modification needed
+    exit 2
+  end
+end
