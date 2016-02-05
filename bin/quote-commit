@@ -1,1 +1,0 @@
-ssh -t azurefire.net 'sudo su - pushbot -c "cd /var/pushbot/botdata/ && git add . && git commit"'
