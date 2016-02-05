@@ -1,5 +1,10 @@
 # Automatically shellinit docker-machine if it's up.
 
+# Use a named docker-machine VirtualBox VM, optionally creating or starting it if necessary.
+# Automatically source the connection environment variables into the current shell and add or
+# modify /etc/hosts to include an entry pointing to it.
+#
+# Usage: dmachine <machine-name> [create] [quiet]
 function dmachine() {
   local MACHINENAME=$1
   local CREATE=${2:-}
