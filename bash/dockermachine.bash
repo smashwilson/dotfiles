@@ -20,7 +20,8 @@ function dmachine() {
 
     [ -z "${QUIET}" ] && echo "dmachine: adding /etc/hosts entry ${ETCHOSTNAME} -> ${MACHINEIP}"
 
-    sudo add-etc-host "${ETCHOSTNAME}" "${MACHINEIP}"
+    add-etc-host "${ETCHOSTNAME}" "${MACHINEIP}"
+    [ "$?" = "2" ] && sudo add-etc-host "${ETCHOSTNAME}" "${MACHINEIP}"
   else
     if [ -n "${CREATE}" ]; then
       local STATUS="$(docker-machine status ${MACHINENAME} 2>/dev/null)"
