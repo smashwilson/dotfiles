@@ -4,8 +4,8 @@
 # Automatically source the connection environment variables into the current shell and add or
 # modify /etc/hosts to include an entry pointing to it.
 #
-# Usage: dmachine <machine-name> [create] [quiet]
-function dmachine() {
+# Usage: machineme <machine-name> [create] [quiet]
+function machineme() {
   local MACHINENAME=$1
   local CREATE=${2:-}
   local QUIET=${3:-}
@@ -54,13 +54,13 @@ function dmachine() {
 }
 
 # If docker-machine is running a box called "dev", exec its environment setup.
-function machineme() {
+function devmachine() {
   ORIGINAL_CONFIG=$(readlink ${HOME}/.ssh/config)
   setup-offvpn 1>/dev/null
 
-  dmachine dev "" quiet
+  machineme dev "" quiet
 
   ln -f -s ${ORIGINAL_CONFIG} ${HOME}/.ssh/config
 }
 
-which docker-machine 1>/dev/null 2>&1 && machineme
+which docker-machine 1>/dev/null 2>&1 && devmachine
