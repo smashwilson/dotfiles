@@ -24,3 +24,8 @@ has()
 {
   which $1 >/dev/null 2>&1
 }
+
+hasfunc()
+{
+  type -t $1 >/dev/null 2>&1
+}
