@@ -22,5 +22,5 @@ function swarmme() {
   echo "swarmme: Using swarm ${SWARMNAME}."
   dvm use
   unset DOCKER_MACHINENAME
-  export DOCKER_SWARMNAME="${SWARMNAME}"
+  export DOCKER_SWARM_NAME="${SWARMNAME}"
 }
