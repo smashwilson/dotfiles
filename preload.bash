@@ -1,3 +1,7 @@
+#!/bin/sh
+#
+# This file is sourced by .bashrc before any of the other .bash files.
+
 export BLACK="\[\033[0;30m\]"
 export BLUE="\[\033[0;34m\]"
 export GREEN="\[\033[0;32m\]"
@@ -15,3 +19,8 @@ export LT_PURPLE="\[\033[1;35m\]"
 export YELLOW="\[\033[1;33m\]"
 export WHITE="\[\033[1;37m\]"
 export RESET="\[\033[0m\]"
+
+has()
+{
+  which $1 >/dev/null 2>&1
+}

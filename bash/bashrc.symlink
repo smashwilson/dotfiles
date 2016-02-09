@@ -1,6 +1,9 @@
 # shortcut to this dotfiles path is $DOT
 export DOT=$HOME/.dotfiles
 
+# source load
+source ${DOT}/preload.bash
+
 case "${OSTYPE}" in
   linux*)
     shopt -s globstar
