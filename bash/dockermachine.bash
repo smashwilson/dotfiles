@@ -13,6 +13,8 @@ function machineme() {
   local CONFIG="$(docker-machine env ${MACHINENAME} 2>/dev/null)"
 
   if [ -n "${CONFIG}" ]; then
+    [ -z "${QUIET}" ] && echo "machineme: setting environment for machine ${MACHINENAME}."
+
     eval "${CONFIG}"
 
     local ETCHOSTNAME="docker${MACHINENAME}"
@@ -20,7 +22,7 @@ function machineme() {
 
     add-etc-host "${ETCHOSTNAME}" "${MACHINEIP}"
     [ "$?" = "2" ] && {
-      echo "dmachine: adding /etc/hosts entry ${ETCHOSTNAME} -> ${MACHINEIP}"
+      echo "machineme: adding /etc/hosts entry ${ETCHOSTNAME} -> ${MACHINEIP}"
       sudo add-etc-host "${ETCHOSTNAME}" "${MACHINEIP}"
     }
     return 0
@@ -30,24 +32,24 @@ function machineme() {
 
       case "${STATUS}" in
         Stopped)
-          [ -z "${QUIET}" ] && echo "dmachine: starting machine ${MACHINENAME}."
+          [ -z "${QUIET}" ] && echo "machineme: starting machine ${MACHINENAME}."
 
           docker-machine start ${MACHINENAME}
           ;;
         "")
-          [ -z "${QUIET}" ] && echo "dmachine: creating machine ${MACHINENAME}."
+          [ -z "${QUIET}" ] && echo "machineme: creating machine ${MACHINENAME}."
 
           docker-machine create -d virtualbox ${MACHINENAME}
           ;;
         *)
-          echo "dmachine: unfamiliar machine status '${STATUS}' for ${MACHINENAME}." >&2
+          echo "machineme: unfamiliar machine status '${STATUS}' for ${MACHINENAME}." >&2
           return 1
           ;;
       esac
 
-      dmachine "${MACHINENAME}" "" "${QUIET}"
+      machineme "${MACHINENAME}" "" "${QUIET}"
     else
-      [ -z "${QUIET}" ] && echo "dmachine: ${MACHINENAME} is not started or does not exist." >&2
+      [ -z "${QUIET}" ] && echo "machineme: ${MACHINENAME} is not started or does not exist." >&2
       return 1
     fi
   fi
