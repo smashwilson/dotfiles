@@ -1,6 +1,5 @@
 export WORKON_HOME=~/.venv
 
-has workon && {
-  echo "sourcing"
+[ -f /usr/local/bin/virtualenvwrapper.sh ] && {
   source /usr/local/bin/virtualenvwrapper.sh
 }
