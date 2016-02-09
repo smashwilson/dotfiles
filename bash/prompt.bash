@@ -16,9 +16,16 @@ __last_exit()
 __docker()
 {
   if [ -n "${DOCKER_MACHINE_NAME}" ]; then
-    echo -n "docker:${DOCKER_MACHINE_NAME}"
+    echo -n " docker:${DOCKER_MACHINE_NAME}"
   elif [ -n "${DOCKER_SWARM_NAME}" ]; then
-    echo -n "carina:${DOCKER_SWARM_NAME}"
+    echo -n " carina:${DOCKER_SWARM_NAME}"
+  fi
+}
+
+__venv()
+{
+  if [ -n "${VIRTUAL_ENV}" ]; then
+    echo -n " venv:$(basename ${VIRTUAL_ENV})"
   fi
 }
 
@@ -32,7 +39,8 @@ __set_prompt()
   [ -z "${PS1_NOHOST}" ] && PS1="${PS1}${GREEN}@ \h ${RESET}"
 
   PS1="${PS1}${CYAN}\w"
-  PS1="${PS1}${PURPLE} $(__docker)"
+  PS1="${PS1}${PURPLE}$(__docker)"
+  PS1="${PS1}$(__venv)"
   PS1="${PS1}${YELLOW}$(__git_ps1)"
   PS1="${PS1}$(__last_exit)"
   PS1="${PS1}\n\$${RESET} "

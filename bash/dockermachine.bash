@@ -10,6 +10,9 @@ function machineme() {
   local CREATE=${2:-}
   local QUIET=${3:-}
 
+  unset DOCKER_MACHINE_NAME
+  unset DOCKER_SWARM_NAME
+
   local CONFIG="$(docker-machine env ${MACHINENAME} 2>/dev/null)"
 
   if [ -n "${CONFIG}" ]; then
