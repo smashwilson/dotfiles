@@ -4,10 +4,14 @@
 
 case "${OSTYPE}" in
   darwin*)
-    export NVM_DIR=${HOME}/.nvm
-    source $(brew --prefix nvm)/nvm.sh
+    has brew && [ -d $(brew --prefix nvm) ] && {
+      export NVM_DIR=${HOME}/.nvm
+      source $(brew --prefix nvm)/nvm.sh
+    }
     ;;
   linux*)
-    source ${HOME}/.nvm/nvm.sh
+    [ -f ${HOME}/.nvm/nvm.sh ] && {
+      source ${HOME}/.nvm/nvm.sh
+    }
     ;;
 esac
