@@ -7,7 +7,7 @@ export GIT_PS1_SHOWUPSTREAM="auto"
 __last_exit()
 {
   if [ $PS1_EXITCODE -eq 0 ]; then
-    echo -n "${RESET} "
+    echo -n "${LT_GRAY} "
   else
     echo -n "${RED} [$?] "
   fi

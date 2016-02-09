@@ -21,6 +21,6 @@ function swarmme() {
   source ${SWARM_DIR}/docker.env
   echo "swarmme: Using swarm ${SWARMNAME}."
   dvm use
-  unset DOCKER_MACHINENAME
+  unset DOCKER_MACHINE_NAME
   export DOCKER_SWARM_NAME="${SWARMNAME}"
 }
