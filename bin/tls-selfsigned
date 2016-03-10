@@ -1,0 +1,7 @@
+#!/bin/sh
+#
+# Generate a self-signed TLS certificate keypair.
+
+openssl req -x509 -newkey rsa:2048 -days 365 -nodes -batch \
+  -keyout private-key.pem \
+  -out public-certificate.pem
