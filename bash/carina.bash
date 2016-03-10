@@ -1,7 +1,21 @@
 # Automatically source a swarm from ${SWARM_ROOT} and then "dvm use" to sync docker client versions.
 function swarmme() {
   local SWARMNAME=${1}
-  local L_SWARM_ROOT=${SWARM_ROOT:-${HOME}/swarm}
+  local ACCOUNTNAME=${CARINA_USERNAME:-}
+
+  if [ -z "${ACCOUNTNAME}" ]; then
+    local ACCOUNTS=$(ls ${HOME}/.carina/clusters)
+    if echo ${ACCOUNTS} | grep -q ' ' ; then
+      echo "swarmme: Please specify an account as \$CARINA_USERNAME." >&2
+      echo "Accounts available:" >&2
+      echo ${ACCOUNTS} >&2
+      return 1
+    else
+      ACCOUNTNAME=${ACCOUNTS}
+    fi
+  fi
+
+  local L_SWARM_ROOT=${SWARM_ROOT:-${HOME}/.carina/clusters/${ACCOUNTNAME}}
 
   [ -z "${SWARMNAME}" ] && {
     echo "Swarms available:"
