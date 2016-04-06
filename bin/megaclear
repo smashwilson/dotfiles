@@ -1,0 +1,5 @@
+#!/bin/sh
+#
+# On OS X, clear not just the terminal's current output but its scrollback.
+
+exec osascript -e 'if application "Terminal" is frontmost then tell application "System Events" to keystroke "k" using command down'
