@@ -7,6 +7,10 @@ source ${DOT}/preload.bash
 case "${OSTYPE}" in
   linux*)
     shopt -s globstar
+
+    if [ -f /etc/bash_completion ]; then
+      source /etc/bash_completion
+    fi
     ;;
   darwin*)
     if [[ -f $(brew --prefix)/etc/bash_completion ]]; then
