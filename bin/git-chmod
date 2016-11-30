@@ -2,4 +2,6 @@
 #
 # Perform a chmod on a file tracked by git, even on Windows.
 
-exec git update-index --chmod=+x ${1}
+for EACH in ${@}; do
+  git update-index --chmod=+x ${EACH}
+done
