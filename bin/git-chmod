@@ -1,0 +1,5 @@
+#!/bin/sh
+#
+# Perform a chmod on a file tracked by git, even on Windows.
+
+exec git update-index --chmod=+x ${1}
