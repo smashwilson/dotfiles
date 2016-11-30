@@ -20,7 +20,7 @@ setup_gitconfig () {
     sed \
       -e "s/AUTHORNAME/${GIT_AUTHORNAME}/g" \
       -e "s/AUTHOREMAIL/${GIT_AUTHOREMAIL}/g" \
-      -e "s/INSERTHOME/${HOME}/g" \
+      -e "s#AUTHORHOME#${HOME}#g" \
       git/gitconfig.symlink.example > git/gitconfig.symlink
 
     success 'gitconfig'
