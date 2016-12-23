@@ -67,5 +67,3 @@ function devmachine() {
 
   ln -f -s ${ORIGINAL_CONFIG} ${HOME}/.ssh/config
 }
-
-which docker-machine 1>/dev/null 2>&1 && devmachine
