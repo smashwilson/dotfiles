@@ -29,6 +29,17 @@ __venv()
   fi
 }
 
+__kubectl()
+{
+  if which kubectl >/dev/null 2>&1 ; then
+    local CONTEXT=$(kubectl config current-context)
+    local NS=$(kubectl config view -o "jsonpath={.contexts[?(@.name==\"${CONTEXT}\")].context.namespace}")
+    [ -n "${NS}" ] && NS="(${NS})"
+
+    echo -n " k8s:${CONTEXT}${NS}"
+  fi
+}
+
 __set_prompt()
 {
   PS1_EXITCODE=$?
@@ -40,6 +51,7 @@ __set_prompt()
 
   PS1="${PS1}${CYAN}\w"
   PS1="${PS1}${PURPLE}$(__docker)"
+  PS1="${PS1}$(__kubectl)"
   PS1="${PS1}$(__venv)"
   PS1="${PS1}${YELLOW}$(__git_ps1)"
   PS1="${PS1}$(__last_exit)"
