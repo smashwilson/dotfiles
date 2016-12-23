@@ -1,0 +1,24 @@
+#!/bin/bash
+#
+# Fetch pull requests against the current repository.
+
+set -euo pipefail
+
+REMOTE=
+
+[ -z "${1:-}" ] && {
+  echo "git-feature: branch name required"
+}
+
+if git remote get-url upstream >/dev/null 2>&1 ; then
+  REMOTE=upstream
+elif git remote get-url origin >/dev/null 2>&1 ; then
+  REMOTE=origin
+else
+  echo "git-feature: no remote named 'upstream' or 'origin' found" >/dev/null
+  exit 1
+fi
+
+git fetch ${REMOTE}
+git checkout --no-track -b ${1} ${REMOTE}/master
+
