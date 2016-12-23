@@ -1,7 +1,15 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Generate a self-signed TLS certificate keypair.
 
+set -euo pipefail
+
+export SUBJECT=()
+if [ -n "${1:-}" ]; then
+  SUBJECT=(-subj "/CN=${1}")
+fi
+
 openssl req -x509 -newkey rsa:2048 -days 365 -nodes -batch \
+  ${SUBJECT[@]} \
   -keyout private-key.pem \
   -out public-certificate.pem
