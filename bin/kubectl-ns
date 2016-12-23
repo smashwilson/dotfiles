@@ -1,0 +1,5 @@
+#!/bin/bash
+
+CONTEXT=$(kubectl config current-context)
+
+exec kubectl config set-context ${CONTEXT} --namespace ${1:-kube-system}
