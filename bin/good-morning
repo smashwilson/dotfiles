@@ -1,0 +1,36 @@
+#!/bin/bash
+
+set -euo pipefail
+
+CYAN="\033[0;36m"
+RED="\033[0;31m"
+LT_RED="\033[1;31m"
+RESET="\033[0m"
+
+FAILED=""
+
+printf "${CYAN}[..]${RESET} Authenticate to your SSH agent\n"
+ssh-add
+
+printf "${CYAN}[..]${RESET} Upgrade Homebrew packages\n"
+brew upgrade || FAILED="${FAILED}\n\tHomebrew upgrade"
+
+printf "${CYAN}[..]${RESET} Build and install Atom\n"
+cd ${HOME}/code/atom/atom
+if [ "$(git rev-parse --symbolic-full-name HEAD)" = "refs/heads/master" ]; then
+  git pull
+  script/build --install || FAILED="${FAILED}\n\tAtom install"
+else
+  printf "${YELLOW}[--]${RESET} Skipping Atom build: working copy on non-master branch\n"
+fi
+
+printf "${CYAN}[..]${RESET} Update Atom packages\n"
+apm upgrade || FAILED="${FAILED}\n\tAtom package upgrade"
+
+if [ -z "${FAILED}" ]; then
+  printf "${CYAN}[..]${RESET} Complete. Good morning 🌅\n"
+  exit 0
+else
+  printf "${RED}[!!]${LT_RED} Oh snap, something broke 💥${RESET}${FAILED}\n"
+  exit 1
+fi
