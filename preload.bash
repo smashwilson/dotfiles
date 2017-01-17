@@ -20,6 +20,29 @@ export YELLOW="\033[1;33m"
 export WHITE="\033[1;37m"
 export RESET="\033[0m"
 
+bracketed()
+{
+  printf "\[%s\]" $1
+}
+
+export PS1_BLACK=$(bracketed ${BLACK})
+export PS1_BLUE=$(bracketed ${BLUE})
+export PS1_GREEN=$(bracketed ${GREEN})
+export PS1_CYAN=$(bracketed ${CYAN})
+export PS1_RED=$(bracketed ${RED})
+export PS1_PURPLE=$(bracketed ${PURPLE})
+export PS1_BROWN=$(bracketed ${BROWN})
+export PS1_LT_GRAY=$(bracketed ${LT_GRAY})
+export PS1_DK_GRAY=$(bracketed ${DK_GRAY})
+export PS1_LT_BLUE=$(bracketed ${LT_BLUE})
+export PS1_LT_GREEN=$(bracketed ${LT_GREEN})
+export PS1_LT_CYAN=$(bracketed ${LT_CYAN})
+export PS1_LT_RED=$(bracketed ${LT_RED})
+export PS1_LT_PURPLE=$(bracketed ${LT_PURPLE})
+export PS1_YELLOW=$(bracketed ${YELLOW})
+export PS1_WHITE=$(bracketed ${WHITE})
+export PS1_RESET=$(bracketed ${RESET})
+
 has()
 {
   which $1 >/dev/null 2>&1

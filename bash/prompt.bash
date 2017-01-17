@@ -7,9 +7,9 @@ export GIT_PS1_SHOWUPSTREAM="auto"
 __last_exit()
 {
   if [ $PS1_EXITCODE -eq 0 ]; then
-    echo -n "${LT_GRAY} "
+    echo -n "${PS1_LT_GRAY} "
   else
-    echo -n "${RED} [$?] "
+    echo -n "${PS1_RED} [$?] "
   fi
 }
 
@@ -46,16 +46,13 @@ __set_prompt()
 
   PS1=""
 
-  [ -z "${PS1_NOWHO}" ] && PS1="${PS1}${GREEN}\u ${RESET}"
-  [ -z "${PS1_NOHOST}" ] && PS1="${PS1}${GREEN}@ \h ${RESET}"
+  [ -z "${PS1_NOWHO}" ] && PS1="${PS1}${PS1_GREEN}\u ${PS1_RESET}"
+  [ -z "${PS1_NOHOST}" ] && PS1="${PS1}${PS1_GREEN}@ \h ${PS1_RESET}"
 
-  PS1="${PS1}${CYAN}\w"
-  PS1="${PS1}${PURPLE}$(__docker)"
-  PS1="${PS1}$(__kubectl)"
-  PS1="${PS1}$(__venv)"
-  PS1="${PS1}${YELLOW}$(__git_ps1)"
+  PS1="${PS1}${PS1_CYAN}\w"
+  PS1="${PS1}${PS1_YELLOW}$(__git_ps1)"
   PS1="${PS1}$(__last_exit)"
-  PS1="${PS1}\n\$${RESET} "
+  PS1="${PS1}\n\$${PS1_RESET} "
 }
 
 export PROMPT_COMMAND=__set_prompt
