@@ -25,7 +25,7 @@ else
 fi
 
 printf "${CYAN}[..]${RESET} Update Atom packages\n"
-apm upgrade || FAILED="${FAILED}\n\tAtom package upgrade"
+apm upgrade --no-confirm || FAILED="${FAILED}\n\tAtom package upgrade"
 
 if [ -z "${FAILED}" ]; then
   printf "${CYAN}[..]${RESET} Complete. Good morning 🌅\n"
