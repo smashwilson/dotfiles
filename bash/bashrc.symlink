@@ -21,12 +21,6 @@ case "${OSTYPE}" in
     ;;
 esac
 
-# use .localrc for SUPER SECRET CRAP that you don't
-# want in your public, versioned repo.
-if [[ -a ~/.localrc ]]; then
-  source ~/.localrc
-fi
-
 # all of our .bash files
 config_files=$DOT/**/*.bash
 
@@ -52,6 +46,8 @@ fi
 export NVM_DIR="${HOME}/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
-if which rbenv >/dev/null 2>&1; then
-  eval "$(rbenv init -)"
+# use .localrc for SUPER SECRET CRAP that you don't
+# want in your public, versioned repo.
+if [[ -a ~/.localrc ]]; then
+  source ~/.localrc
 fi
