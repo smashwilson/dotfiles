@@ -13,33 +13,6 @@ __last_exit()
   fi
 }
 
-__docker()
-{
-  if [ -n "${DOCKER_MACHINE_NAME}" ]; then
-    echo -n " docker:${DOCKER_MACHINE_NAME}"
-  elif [ -n "${DOCKER_SWARM_NAME}" ]; then
-    echo -n " carina:${DOCKER_SWARM_NAME}"
-  fi
-}
-
-__venv()
-{
-  if [ -n "${VIRTUAL_ENV}" ]; then
-    echo -n " venv:$(basename ${VIRTUAL_ENV})"
-  fi
-}
-
-__kubectl()
-{
-  if which kubectl >/dev/null 2>&1 ; then
-    local CONTEXT=$(kubectl config current-context)
-    local NS=$(kubectl config view -o "jsonpath={.contexts[?(@.name==\"${CONTEXT}\")].context.namespace}")
-    [ -n "${NS}" ] && NS="(${NS})"
-
-    echo -n " k8s:${CONTEXT}${NS}"
-  fi
-}
-
 __set_prompt()
 {
   PS1_EXITCODE=$?

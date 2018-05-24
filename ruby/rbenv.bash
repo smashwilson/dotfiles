@@ -1,4 +1,3 @@
-if which rbenv >/dev/null ; then
-  # load rbenv into the shell.
+has rbenv && {
   eval "$(rbenv init -)"
-fi
+}
