@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Load nvm into the shell.
+# Load nvm into the shell if present.
 
 case "${OSTYPE}" in
   darwin*)
