@@ -15,21 +15,6 @@ ssh-add
 printf "${CYAN}[..]${RESET} Upgrade Homebrew packages\n"
 brew upgrade || FAILED="${FAILED}\n\tHomebrew upgrade"
 
-printf "${CYAN}[..]${RESET} Build and install Atom\n"
-cd ${HOME}/src/atom/atom
-if [ "$(git rev-parse --symbolic-full-name HEAD)" = "refs/heads/master" ]; then
-  git pull
-  if [ -L node_modules/@atom/watcher ]; then
-    rm node_modules/@atom/watcher
-  fi
-  script/build --install || FAILED="${FAILED}\n\tAtom install"
-  npm link ${HOME}/src/atom/watcher
-  cd ${HOME}/src/atom/watcher
-  electron-rebuild --version 2.0.1
-else
-  printf "${YELLOW}[--]${RESET} Skipping Atom build: working copy on non-master branch\n"
-fi
-
 printf "${CYAN}[..]${RESET} Update Atom packages\n"
 apm upgrade --no-confirm || FAILED="${FAILED}\n\tAtom package upgrade"
 
