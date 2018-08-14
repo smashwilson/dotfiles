@@ -20,3 +20,27 @@ function goto() {
   cd "${ATOM_REPOS_HOME}/${ORG}/${REPO}"
   title "${ORG}/${REPO}"
 }
+
+# Completion
+
+function _goto_completion() {
+  if [ "${#COMP_WORDS[@]}" != "2" ]; then
+    return
+  fi
+
+  local DIRS
+  case "${COMP_WORDS[1]}" in
+    */*)
+      DIRS=($(compgen -d -S " " "${HOME}/src/${COMP_WORDS[1]}"))
+      ;;
+    *)
+      DIRS=($(compgen -d -S / "${HOME}/src/${COMP_WORDS[1]}"))
+      ;;
+  esac
+
+  for I in ${!DIRS[@]}; do
+    COMPREPLY[$I]="${DIRS[$I]##${HOME}/src/}"
+  done
+}
+
+complete -o nospace -F _goto_completion goto
