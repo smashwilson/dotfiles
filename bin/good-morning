@@ -9,8 +9,12 @@ RESET="\033[0m"
 
 FAILED=""
 
-printf "${CYAN}[..]${RESET} Authenticate to your SSH agent\n"
-ssh-add
+if ! ssh-add -l >/dev/null; then
+  printf "${CYAN}[..]${RESET} Authenticate to your SSH agent\n"
+  ssh-add || FAILED="${FAILED}\n\tSSH agent initialization"
+else
+  printf "${CYAN}[..]${RESET} SSH agent already initialized\n"
+fi
 
 printf "${CYAN}[..]${RESET} Upgrade Homebrew packages\n"
 brew upgrade || FAILED="${FAILED}\n\tHomebrew upgrade"
