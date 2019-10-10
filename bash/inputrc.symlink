@@ -1,0 +1,11 @@
+# Readline initialization
+
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+
+set bell-style visible
+set expand-tilde off
+set colored-completion-prefix on
+set show-all-if-ambiguous on
+set completion-ignore-case on
+set mark-modified-lines on
