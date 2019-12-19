@@ -2,6 +2,9 @@
 #
 # bootstrap installs things.
 
+# Just disable this for now so Strap can do its thing
+exit 0
+
 DOTFILES_ROOT=$(cd $(dirname $0)/.. && pwd)
 
 set -euo pipefail
