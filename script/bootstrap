@@ -11,26 +11,3 @@ set -euo pipefail
 
 source script/include/output.sh
 source script/include/probe.sh
-
-# Install Ansible if necessary.
-if ! has ansible-playbook; then
-  info "Installing Ansible."
-  if has apt-get; then
-    info "... from aptitude."
-    sudo apt-get install -y ansible
-  elif has pip; then
-    info "... from pip."
-    pip install ansible
-  elif has easy_install; then
-    info "... from pip by way of easy_install."
-    sudo easy_install pip
-    pip install ansible
-  else
-    fail "I don't know how to install Ansible! Install it manually and re-run."
-  fi
-  success "Ansible has been installed."
-fi
-
-info "Updating packages with Ansible."
-ansible-playbook -i localhost, ${DOTFILES_ROOT}/script/ansible/site.yml --ask-sudo-pass
-success "All done!"
