@@ -4,11 +4,6 @@
 
 Your dotfiles are how you personalize your system. These are mine.
 
-Now that I work at Rackspace, I'm spending more time spinning up and tearing
-down these little scratch servers, and nothing makes me sad like a plain bash
-prompt with no colors or git zazz, or a completely vanilla vim that does
-indentation all wrong.
-
 ## install
 
 Run this:
