@@ -1,2 +1,2 @@
 # Load common utility methods.
-require "#{ENV['DOT']}/ruby/repl"
+require "#{ENV['DOTFILES']}/ruby/repl"
