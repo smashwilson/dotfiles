@@ -41,7 +41,13 @@ else
   export EDITOR='atom-nightly'
 fi
 
-eval "$(rbenv init -)"
+if which rbenv >/dev/null 2>&1; then
+  eval "$(rbenv init -)"
+fi
+
+if which nodenv >/dev/null 2>&1; then
+  eval "$(nodenv init -)"
+fi
 
 # use .localrc for SUPER SECRET CRAP that you don't want in your public,
 # versioned repo.
