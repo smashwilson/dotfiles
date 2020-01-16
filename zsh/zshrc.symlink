@@ -41,6 +41,10 @@ else
   export EDITOR='atom-nightly'
 fi
 
+# Pager configuration
+
+export LESS="-XFR"
+
 if which rbenv >/dev/null 2>&1; then
   eval "$(rbenv init -)"
 fi
