@@ -1,0 +1,5 @@
+#!/bin/sh
+#
+# List local branches that are no longer on origin
+
+git branch -vv | grep -E '\[origin/[^:]+: gone\]' | awk '{print $1}'
