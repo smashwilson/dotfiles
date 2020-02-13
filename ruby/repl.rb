@@ -16,3 +16,29 @@ end
 def clear
   ScreenWipe
 end
+
+def trace_sql!
+  if block_given?
+    result = nil
+    trace_sql!
+    begin
+      result = yield
+    ensure
+      untrace_sql!
+    end
+    result
+  else
+    ActiveRecord::Base.logger = Logger.new(STDOUT)
+    nil
+  end
+end
+
+def untrace_sql!
+  ActiveRecord::Base.logger = GitHub::Logger.new(Rails.root.join(GitHub::Logger::DEVELOPMENT_LOG_FILE))
+  nil
+end
+
+def include_url_helpers
+  include Rails.application.routes.url_helpers
+  nil
+end
