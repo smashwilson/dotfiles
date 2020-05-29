@@ -42,3 +42,15 @@ def include_url_helpers
   include Rails.application.routes.url_helpers
   nil
 end
+
+module IntegrationTestPryHelpers
+  def puts_select(*args)
+    puts HTMLSelector.new(args) { nodeset document_root_element }.select.to_html
+  end
+end
+
+if defined? GitHub::IntegrationTestCase
+  class GitHub::IntegrationTestCase
+    include IntegrationTestPryHelpers
+  end
+end
