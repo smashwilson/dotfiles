@@ -2,7 +2,7 @@
 export DOTFILES="${HOME}/.dotfiles"
 
 # Add bin/ scripts
-export PATH="${HOME}/bin:./bin:${DOTFILES}/bin:${HOME}/.rbenv/bin:${PATH}"
+export PATH="${HOME}/bin:./bin:${DOTFILES}/bin:${HOME}/.rbenv/bin:${HOME}/go/bin:${PATH}"
 
 # Path to your oh-my-zsh installation.
 export ZSH="${HOME}/.oh-my-zsh"
