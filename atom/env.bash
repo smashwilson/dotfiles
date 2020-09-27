@@ -1,7 +1,7 @@
 #!/bin/bash
 
 export ATOM_REPOS_HOME=${HOME}/src/
-export ATOM_SRC=${HOME}/src/atom/atom
+export ATOM_SRC=${HOME}/src/atom/
 
 atomlive() {
   export ATOM_DEV_RESOURCE_PATH=${ATOM_SRC}
