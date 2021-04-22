@@ -1,2 +1,5 @@
 # Load common utility methods.
 require "#{ENV['DOTFILES']}/ruby/repl"
+
+# Pry-specific changes
+Pry.config.editor = ->(file,line) { "code -g #{file}:#{line}" }

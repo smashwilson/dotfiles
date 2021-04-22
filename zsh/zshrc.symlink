@@ -40,7 +40,7 @@ unsetopt share_history
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
 else
-  export EDITOR='atom-nightly --wait'
+  export EDITOR='code --wait'
 fi
 
 # Pager configuration
