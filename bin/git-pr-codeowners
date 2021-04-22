@@ -1,0 +1,17 @@
+#!/bin/bash
+#
+# List the GitHub teams who will be pinged by this pull request. Requires the presence of a `bin/codeowners` script.
+
+set -euo pipefail
+
+BASE=${1:-}
+
+cd $(git rev-parse --show-toplevel)
+
+if [ ! -x "bin/codeowners" ]; then
+  echo "No bin/codeowners script found." >&2
+  exit 1
+fi
+
+FILES=$(git pr-files "${BASE}" | cut -f 2 | tr '\n' ' ')
+bin/codeowners ${FILES}

@@ -1,0 +1,33 @@
+#!/bin/bash
+#
+# List the filenames included in the current pull request.
+
+set -euo pipefail
+IFS=$'\n\t'
+
+BASE=${1:-}
+if [ -z "${BASE}" ]; then
+  if which branchtree >/dev/null 2>&1; then
+    BASE=$(RBENV_VERSION=2.7.1 branchtree parent || printf "main")
+  else
+    BASE=main
+  fi
+
+  if ! git show-ref --verify --quiet "refs/heads/${BASE}"; then
+    BASE=master
+    if ! git show-ref --verify --quiet "refs/heads/${BASE}"; then
+      echo "Unable to determine main branch of the repository to use as a base." >&2
+      echo "Please specify one as an argument." >&2
+      exit 1
+    fi
+  fi
+else
+  if ! git show-ref --verify --quiet "refs/heads/${BASE}"; then
+    echo "Base branch ${BASE} does not exist." >&2
+    echo "Please specify an existing branch to use as a base." >&2
+    exit 1
+  fi
+fi
+
+MERGE_BASE=$(git merge-base HEAD "${BASE}")
+exec git diff --name-status "${MERGE_BASE}"
