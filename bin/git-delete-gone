@@ -2,4 +2,4 @@
 #
 # Delete local branches that are no longer on origin
 
-git branch -vv | grep -E 'origin/[^:]+: gone\]' | awk '{print $1}' | xargs git branch -d
+git branch -vv | grep -E 'origin/[^:]+: gone\]' | awk '{print $1}' | xargs git branch -D
