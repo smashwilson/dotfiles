@@ -2,4 +2,4 @@
 #
 # List all local branches that have been merged into HEAD.
 
-git branch --merged | grep -v '^*' | grep -v 'master'
+git branch --merged | grep -v '^*' | grep -v -E 'master|main'

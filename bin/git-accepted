@@ -4,6 +4,15 @@
 # Checkout master, pull in any new changes, and delete the now-merged
 # pull request branch.
 
-git checkout master
+BASE=main
+if ! git show-ref --verify --quiet "refs/heads/${BASE}"; then
+  BASE=master
+  if ! git show-ref --verify --quiet "refs/heads/${BASE}"; then
+    echo "Unable to determine main branch of the repository to use as a base." >&2
+    exit 1
+  fi
+fi
+
+git checkout "${BASE}"
 git pull --prune
 git delete-local-merged
