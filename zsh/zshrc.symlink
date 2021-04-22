@@ -55,6 +55,8 @@ if which nodenv >/dev/null 2>&1; then
   eval "$(nodenv init -)"
 fi
 
+alias branchtree='RBENV_VERSION=2.7.1 branchtree'
+
 # use .localrc for SUPER SECRET CRAP that you don't want in your public,
 # versioned repo.
 if [[ -a ~/.localrc ]]; then
