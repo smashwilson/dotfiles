@@ -2,4 +2,8 @@
 require "#{ENV['DOTFILES']}/ruby/repl"
 
 # Pry-specific changes
-Pry.config.editor = ->(file,line) { "code -g #{file}:#{line}" }
+Pry.config.editor = ->(file, line) { "code -g #{file}:#{line}" }
+
+# Machine-local utilities
+local_rb = File.join(ENV["HOME"], ".pryrc-local.rb")
+require(local_rb) if File.exist?(local_rb)
