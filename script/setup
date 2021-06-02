@@ -20,7 +20,7 @@ setup_rcfiles () {
 }
 
 setup_gitconfig () {
-  if [ "${CODESPACES}" = "true" ]; then
+  if [ "${CODESPACES:-}" = "true" ]; then
     return
   fi
 
@@ -59,7 +59,7 @@ install_dotfiles () {
   local BACKUP_ALL=${BACKUP_ALL:-false}
   local SKIP_ALL=${SKIP_ALL:-false}
 
-  if [ "${CODESPACES}" = "true" ]; then
+  if [ "${CODESPACES:-}" = "true" ]; then
     info "Codespaces setup triggered."
     OVERWRITE_ALL="true"
   fi
