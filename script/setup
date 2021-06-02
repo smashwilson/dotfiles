@@ -9,6 +9,10 @@ set -euo pipefail
 source script/include/output.sh
 
 setup_gitconfig () {
+  if [ "${CODESPACES}" = "true" ]; then
+    return
+  fi
+
   if [ ! -f git/gitconfig.symlink ]; then
     info "setup gitconfig"
 
@@ -43,6 +47,11 @@ install_dotfiles () {
   local OVERWRITE_ALL=${OVERWRITE_ALL:-false}
   local BACKUP_ALL=${BACKUP_ALL:-false}
   local SKIP_ALL=${SKIP_ALL:-false}
+
+  if [ "${CODESPACES}" = "true" ]; then
+    info "Codespaces setup triggered."
+    SKIP_ALL="true"
+  fi
 
   for SOURCE in $(find $DOTFILES_ROOT -maxdepth 2 -name \*.symlink); do
     DEST="$HOME/.`basename \"${SOURCE%.*}\"`"
