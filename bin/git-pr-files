@@ -8,7 +8,7 @@ IFS=$'\n\t'
 BASE=${1:-}
 if [ -z "${BASE}" ]; then
   if which branchtree >/dev/null 2>&1; then
-    BASE=$(RBENV_VERSION=2.7.1 branchtree parent || printf "main")
+    BASE=$(RBENV_VERSION=2.7.1 branchtree parent 2>/dev/null || printf "main")
   else
     BASE=main
   fi
