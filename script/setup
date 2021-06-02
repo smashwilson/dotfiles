@@ -12,7 +12,7 @@ setup_rcfiles () {
   for RCFILE in bash/bashrc.symlink zsh/zshrc.symlink; do
     if [ ! -f "${RCFILE}" ]; then
       sed \
-        -e "s/__DOTFILES_ROOT__/${DOTFILES_ROOT}/" \
+        -e "s#__DOTFILES_ROOT__#${DOTFILES_ROOT}#g" \
         "${RCFILE}.example" > "${RCFILE}"
       success "templated ${RCFILE}"
     fi
