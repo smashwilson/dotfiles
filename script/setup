@@ -50,7 +50,7 @@ install_dotfiles () {
 
   if [ "${CODESPACES}" = "true" ]; then
     info "Codespaces setup triggered."
-    SKIP_ALL="true"
+    OVERWRITE_ALL="true"
   fi
 
   for SOURCE in $(find $DOTFILES_ROOT -maxdepth 2 -name \*.symlink); do
