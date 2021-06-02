@@ -1,5 +1,9 @@
 # show the current git branch on the prompt.
 
+if [ -f /usr/lib/git-core/git-sh-prompt ]; then
+  source /usr/lib/git-core/git-sh-prompt
+fi
+
 export GIT_PS1_SHOWDIRTYSTATE="1"
 export GIT_PS1_SHOWUNTRACKEDFILES="1"
 export GIT_PS1_SHOWUPSTREAM="auto"
