@@ -1,8 +1,9 @@
-# shortcut to this dotfiles path is $DOT
-export DOT=$HOME/.dotfiles
+# shortcut to this dotfiles path is $DOTFILES.
+# Interpolated in script/setup.
+export DOTFILES="__DOTFILES_ROOT__"
 
 # source load
-source ${DOT}/preload.bash
+source ${DOTFILES}/preload.bash
 
 case "${OSTYPE}" in
   linux*)
@@ -22,7 +23,7 @@ case "${OSTYPE}" in
 esac
 
 # all of our .bash files
-config_files=$DOT/**/*.bash
+config_files=$DOTFILES/**/*.bash
 
 # load the path files first
 for file in $config_files ; do

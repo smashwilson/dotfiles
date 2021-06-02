@@ -1,5 +1,6 @@
 # Path to these dotfiles.
-export DOTFILES="${HOME}/.dotfiles"
+# Interpolated in script/setup.
+export DOTFILES="__DOTFILES_ROOT__"
 
 # Add bin/ scripts
 export PATH="${HOME}/bin:./bin:${DOTFILES}/bin:${HOME}/.rbenv/bin:${HOME}/go/bin:${PATH}"
