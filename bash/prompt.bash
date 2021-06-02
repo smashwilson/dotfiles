@@ -17,19 +17,32 @@ __last_exit()
   fi
 }
 
-__set_prompt()
-{
-  PS1_EXITCODE=$?
+if [ "${CODESPACES:-}" = "true" ]; then
+  __set_prompt()
+  {
+    PS1_EXITCODE=$?
 
-  PS1=""
+    PS1="⛅️ "
+    PS1="${PS1}${PS1_CYAN}\w"
+    PS1="${PS1}${PS1_YELLOW}$(__git_ps1)"
+    PS1="${PS1}$(__last_exit)"
+    PS1="${PS1}\n\$${PS1_RESET} "
+  }
+else
+  __set_prompt()
+  {
+    PS1_EXITCODE=$?
 
-  [ -z "${PS1_NOWHO}" ] && PS1="${PS1}${PS1_GREEN}\u ${PS1_RESET}"
-  [ -z "${PS1_NOHOST}" ] && PS1="${PS1}${PS1_GREEN}@ \h ${PS1_RESET}"
+    PS1=""
 
-  PS1="${PS1}${PS1_CYAN}\w"
-  PS1="${PS1}${PS1_YELLOW}$(__git_ps1)"
-  PS1="${PS1}$(__last_exit)"
-  PS1="${PS1}\n\$${PS1_RESET} "
-}
+    [ -z "${PS1_NOWHO}" ] && PS1="${PS1}${PS1_GREEN}\u ${PS1_RESET}"
+    [ -z "${PS1_NOHOST}" ] && PS1="${PS1}${PS1_GREEN}@ \h ${PS1_RESET}"
+
+    PS1="${PS1}${PS1_CYAN}\w"
+    PS1="${PS1}${PS1_YELLOW}$(__git_ps1)"
+    PS1="${PS1}$(__last_exit)"
+    PS1="${PS1}\n\$${PS1_RESET} "
+  }
+fi
 
 export PROMPT_COMMAND=__set_prompt
