@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# bootstrap installs things.
+# script installs things.
 
 DOTFILES_ROOT=$(cd $(dirname $0)/.. && pwd)
 
