@@ -4,7 +4,8 @@ require 'irb/completion'
 require 'irb/ext/save-history'
 require 'rubygems'
 
-require "#{ENV['DOTFILES']}/ruby/repl"
+dotfiles_ruby_dir = File.realpath(__dir__)
+require "#{dotfiles_ruby_dir}/repl"
 
 IRB.conf[:SAVE_HISTORY] = 1000
 IRB.conf[:HISTORY_FILE] = "#{ENV['HOME']}/.irb_history"

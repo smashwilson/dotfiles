@@ -1,5 +1,6 @@
 # Load common utility methods.
-require "#{ENV['DOTFILES']}/ruby/repl"
+dotfiles_ruby_dir = File.realpath(__dir__)
+require "#{dotfiles_ruby_dir}/repl"
 
 # Pry-specific changes
 Pry.config.editor = ->(file, line) { "code -g #{file}:#{line}" }
