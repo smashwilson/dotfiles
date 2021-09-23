@@ -21,6 +21,10 @@ setup_rcfiles () {
 
 setup_gitconfig () {
   if [ "${CODESPACES:-}" = "true" ]; then
+    git config --global pull.rebase false
+    git config --global gc.auto 0
+    git config --global user.name "Ash Wilson"
+    git config --global user.email "smashwilson@github.com"
     return
   fi
 
