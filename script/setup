@@ -25,6 +25,7 @@ setup_gitconfig () {
     git config --global gc.auto 0
     git config --global user.name "Ash Wilson"
     git config --global user.email "smashwilson@github.com"
+    git config --global merge.conflictstyle diff3
     return
   fi
 
