@@ -17,4 +17,8 @@ case "$OSTYPE" in
     shopt -u direxpand
 esac
 
-export EDITOR=vim
+if [ "${CODESPACES:-}" = "true" ]; then
+  export EDITOR=code
+else
+  export EDITOR=vim
+fi
