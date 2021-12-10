@@ -296,8 +296,15 @@ def query_pull_request_status(pull_request)
 end
 
 def report(building_pull_requests, verbose:)
+  statuses_by_pull_request = {}
+  building_pull_requests.each do |pull_request|
+    statuses_by_pull_request[pull_request] = query_pull_request_status(pull_request)
+  end
+  
+  yield if block_given?
+
   building_pull_requests.select do |pull_request|
-    statuses = query_pull_request_status(pull_request)
+    statuses = statuses_by_pull_request.fetch(pull_request, [])
 
     puts "\n\e[1m#{pull_request}\e[0m"
     statuses.each do |status|
@@ -313,9 +320,10 @@ end
 if options[:wait]
   remaining_pull_requests = pull_requests
   while remaining_pull_requests.any?
-    puts `clear`
-    puts Time.now.strftime("\n⌚️ %I:%M:%S\n")
-    remaining_pull_requests = report(remaining_pull_requests, verbose: options[:verbose])
+    remaining_pull_requests = report(remaining_pull_requests, verbose: options[:verbose]) do
+      puts `clear`
+      puts Time.now.strftime("\n⌚️ %I:%M:%S\n")
+    end
     sleep options[:delay] if remaining_pull_requests.any?
   end
 else
