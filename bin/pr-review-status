@@ -136,9 +136,19 @@ data["search"]["nodes"].each do |pull_request|
 
   next if approval_count + pending_count + request_count == 0
 
+  total_count = request_count + pending_count + approval_count
+  ready = approval_count == total_count
+
+  title_color = if approval_count == total_count
+    # Ready
+    "\e[1;32m"
+  else
+    "\e[1m"
+  end
+
   puts
   puts "\e[4m#{pull_request["url"]}\e[0m"
-  puts "\e[1m#{pull_request["title"]}\e[0m [#{approval_count} / #{request_count + pending_count + approval_count}]"
+  puts "#{title_color}#{pull_request["title"]}\e[0m [#{approval_count} / #{total_count}]"
 
   pull_request["reviews"]["nodes"].each do |rev|
     next if rev["onBehalfOf"]["nodes"].none?
