@@ -236,23 +236,20 @@ pull_request_data = query_request(query: <<-GQL, variables: { search: search })
             }
           }
           url
-          isDraft
         }
       }
     }
   }
 GQL
 
-pull_requests = pull_request_data["search"]["nodes"].flat_map do |node|
-  next [] if node["isDraft"]
-
-  [PullRequest.new(
+pull_requests = pull_request_data["search"]["nodes"].map do |node|
+  PullRequest.new(
     node["baseRepository"]["owner"]["login"],
     node["baseRepository"]["name"],
     node["number"],
     node["title"],
     node["url"]
-  )]
+  )
 end
 
 def query_pull_request_status(pull_request)
