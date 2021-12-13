@@ -5,12 +5,14 @@ require "json"
 require "net/http"
 
 options = {
+  repos: [],
+  all_repos: false,
   wait: false,
   verbose: false,
-  delay: 5.0,
+  delay: 10.0,
 }
 opts = OptionParser.new do |opts|
-  opts.banner = "Usage: pr-build-status [options] owner/name#123 456 [...]"
+  opts.banner = "Usage: pr-build-status [options]"
 
   opts.on("-t", "--token TOKEN", "GitHub API personal access token") do |token|
     options[:token] = token
@@ -29,21 +31,23 @@ opts = OptionParser.new do |opts|
     options[:delay] = seconds.to_f
   end
 
+  opts.on("-r", "--repo OWNER/NAME", "Limit results to PRs opened in this repo") do |nwo|
+    options[:repos] << nwo
+  end
+
+  opts.on("--all-repos", "Include results from all repos") do
+    options[:all_repos] = true
+  end
+
   opts.on("-h", "--help", "Display this message") do
     puts opts
     exit
   end
 end
 opts.parse!
-pull_request_phrases = ARGV.dup
 
-default_repo = ENV["GITHUB_REPOSITORY"]
-default_repo_owner, default_repo_name = nil, nil
-if default_repo && default_repo =~ /\A([^\/]+)\/([^\/]+)\z/
-  default_repo_owner, default_repo_name = $1, $2
-else
-  $stderr.puts "WARNING: Unable to parse default repository owner and name from #{default_repo.inspect}."
-  $stderr.puts "WARNING: Only fully specified PRs (owner/name#123) will be understood."
+if ENV["GITHUB_REPOSITORY"] && options[:repos].empty? && !options[:all_repos]
+  options[:repos] << ENV["GITHUB_REPOSITORY"]
 end
 
 TOKEN = options[:token] || ENV["GH_GH_PAT"] || ENV["GITHUB_TOKEN"]
@@ -62,29 +66,22 @@ class PullRequest
     @owner = owner
     @name = name
     @number = number
+    @pending = true
   end
 
   attr_reader :owner, :name, :number
 
+  def pending?
+    @pending
+  end
+
+  def complete!
+    @pending = false
+  end
+
   def to_s
     "#{owner}/#{name}##{number}"
   end
-end
-
-pull_requests = pull_request_phrases.flat_map do |phrase|
-  if phrase =~ /\A([^\/]+)\/([^\/]+)#(\d+)\z/
-    [PullRequest.new($1, $2, $3)]
-  elsif default_repo_owner && default_repo_name && phrase =~ /\A#?(\d+)\z/
-    [PullRequest.new(default_repo_owner, default_repo_name, $1)]
-  else
-    $stderr.puts "Unable to parse pull request from #{phrase.inspect}."
-    []
-  end
-end
-
-if pull_requests.none?
-  puts opts
-  exit 0
 end
 
 def query_request(query:, variables:)
@@ -111,6 +108,38 @@ def query_request(query:, variables:)
     exit 1
   end
   data = payload["data"]
+end
+
+search = "is:pr author:@me state:open"
+options[:repos].each { |nwo| search << " repo:#{nwo}" }
+
+pull_request_data = query_request(query: <<-GQL, variables: { search: search })
+  query($search: String!) {
+    search(query: $search, first: 30, type: ISSUE) {
+      nodes {
+        ... on PullRequest {
+          number
+          baseRepository {
+            name
+            owner {
+              login
+            }
+          }
+          isDraft
+        }
+      }
+    }
+  }
+GQL
+
+pull_requests = pull_request_data["search"]["nodes"].flat_map do |node|
+  next [] if node["isDraft"]
+
+  [PullRequest.new(
+    node["baseRepository"]["owner"]["login"],
+    node["baseRepository"]["name"],
+    node["number"]
+  )]
 end
 
 class Status
@@ -271,6 +300,8 @@ def query_pull_request_status(pull_request)
   })
 
   rollup = data["repository"]["pullRequest"]["commits"]["nodes"][0]["commit"]["statusCheckRollup"]
+  return [] unless rollup
+  
   rollup["contexts"]["nodes"].flat_map do |context|
     case context["__typename"]
     when "CheckRun"
@@ -295,36 +326,41 @@ def query_pull_request_status(pull_request)
   end
 end
 
-def report(building_pull_requests, verbose:)
+def report(pull_requests, verbose:)
   statuses_by_pull_request = {}
-  building_pull_requests.each do |pull_request|
+  pull_requests.select(&:pending?).each do |pull_request|
     statuses_by_pull_request[pull_request] = query_pull_request_status(pull_request)
   end
   
   yield if block_given?
 
-  building_pull_requests.select do |pull_request|
+  pull_requests.each do |pull_request|
     statuses = statuses_by_pull_request.fetch(pull_request, [])
+    pull_request.complete! if statuses.none?(&:pending?)
 
-    puts "\n\e[1m#{pull_request}\e[0m"
+    suffix = if pull_request.pending?
+      "⏳ [#{statuses.count(&:pending?)} / #{statuses.size}]"
+    elsif statuses.any?(&:failed?)
+      "💥"
+    else
+      "✅"
+    end
+    puts "\n\e[1m#{pull_request}\e[0m - #{suffix}"
     statuses.each do |status|
       next if (status.succeeded? || status.neutral?) && !verbose
 
       puts "  #{status.emoji} #{status.summarize}"
     end
-
-    statuses.any?(&:pending?)
   end
 end
 
 if options[:wait]
-  remaining_pull_requests = pull_requests
-  while remaining_pull_requests.any?
-    remaining_pull_requests = report(remaining_pull_requests, verbose: options[:verbose]) do
+  while pull_requests.any?(&:pending?)
+    report(pull_requests, verbose: options[:verbose]) do
       puts `clear`
       puts Time.now.strftime("\n⌚️ %I:%M:%S\n")
     end
-    sleep options[:delay] if remaining_pull_requests.any?
+    sleep options[:delay] if pull_requests.any?(&:pending?)
   end
 else
   report(pull_requests, verbose: options[:verbose])
