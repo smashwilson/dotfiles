@@ -68,17 +68,19 @@ class PullRequest
     @number = number
     @title = title
     @url = url
+    @latest_statuses = []
     @pending = true
   end
 
-  attr_reader :owner, :name, :number, :title, :url
+  attr_reader :owner, :name, :number, :title, :url, :latest_statuses
 
   def pending?
     @pending
   end
 
-  def complete!
-    @pending = false
+  def accept_statuses(statuses)
+    @latest_statuses = statuses
+    @pending = false if @latest_statuses.none?(&:pending?)
   end
 
   def to_s
@@ -100,6 +102,10 @@ class Status
 
   def pending?
     true
+  end
+
+  def completed?
+    !pending?
   end
 
   def succeeded?
@@ -332,17 +338,15 @@ end
 def report(pull_requests, verbose:)
   statuses_by_pull_request = {}
   pull_requests.select(&:pending?).each do |pull_request|
-    statuses_by_pull_request[pull_request] = query_pull_request_status(pull_request)
+    pull_request.accept_statuses(query_pull_request_status(pull_request))
   end
   
   yield if block_given?
 
   pull_requests.each do |pull_request|
-    statuses = statuses_by_pull_request.fetch(pull_request, [])
-    pull_request.complete! if statuses.none?(&:pending?)
-
+    statuses = pull_request.latest_statuses
     suffix = if pull_request.pending?
-      "⏳ [#{statuses.count(&:pending?)} / #{statuses.size}]"
+      "⏳ [#{statuses.count(&:completed?)} / #{statuses.size}]"
     elsif statuses.any?(&:failed?)
       "💥"
     else
