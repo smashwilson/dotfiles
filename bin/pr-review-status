@@ -136,9 +136,6 @@ data["search"]["nodes"].each do |pull_request|
 
   next if approval_count + pending_count + request_count == 0
 
-  message = "- "
-  message << pull_request["title"]
-  message << " [#{approval_count} / #{request_count + pending_count + approval_count}]"
   puts
   puts "\e[4m#{pull_request["url"]}\e[0m"
   puts "\e[1m#{pull_request["title"]}\e[0m [#{approval_count} / #{request_count + pending_count + approval_count}]"
