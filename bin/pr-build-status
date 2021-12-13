@@ -62,14 +62,16 @@ end
 GRAPHQL_URI = URI("https://api.github.com/graphql")
 
 class PullRequest
-  def initialize(owner, name, number)
+  def initialize(owner, name, number, title, url)
     @owner = owner
     @name = name
     @number = number
+    @title = title
+    @url = url
     @pending = true
   end
 
-  attr_reader :owner, :name, :number
+  attr_reader :owner, :name, :number, :title, :url
 
   def pending?
     @pending
@@ -226,12 +228,14 @@ pull_request_data = query_request(query: <<-GQL, variables: { search: search })
       nodes {
         ... on PullRequest {
           number
+          title
           baseRepository {
             name
             owner {
               login
             }
           }
+          url
           isDraft
         }
       }
@@ -245,7 +249,9 @@ pull_requests = pull_request_data["search"]["nodes"].flat_map do |node|
   [PullRequest.new(
     node["baseRepository"]["owner"]["login"],
     node["baseRepository"]["name"],
-    node["number"]
+    node["number"],
+    node["title"],
+    node["url"]
   )]
 end
 
@@ -345,7 +351,10 @@ def report(pull_requests, verbose:)
     else
       "✅"
     end
-    puts "\n\e[1m#{pull_request}\e[0m - #{suffix}"
+
+    puts
+    puts "\e[4m#{pull_request.url}\e[0m"
+    puts "\e[1m#{pull_request.title}\e[0m - #{suffix}"
     statuses.each do |status|
       next if (status.succeeded? || status.neutral?) && !verbose
 
@@ -368,4 +377,5 @@ if options[:wait]
   end
 else
   report(pull_requests, verbose: options[:verbose])
+  puts
 end
