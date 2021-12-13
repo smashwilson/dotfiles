@@ -84,64 +84,6 @@ class PullRequest
   end
 end
 
-def query_request(query:, variables:)
-  request = Net::HTTP::Post.new(GRAPHQL_URI, "Authorization": "bearer #{TOKEN}", "Content-Type": "application/json")
-  request.body = { query: query, variables: variables }.to_json
-  response = Net::HTTP.start(GRAPHQL_URI.hostname, GRAPHQL_URI.port, use_ssl: GRAPHQL_URI.scheme == "https") do |http|
-    http.request(request)
-  end
-
-  if response.code != "200"
-    $stderr.puts "Unable to query GraphQL API: #{response.message}"
-    exit 1
-  end
-
-  payload = JSON.parse(response.body)
-
-  if payload["errors"]&.any?
-    $stderr.puts "The GraphQL query encountered errors:"
-    payload["errors"].each do |error|
-      $stderr.puts "\n- #{error["message"]}"
-      $stderr.puts "  type: #{error["type"]}"
-      $stderr.puts "  path: #{error["path"].join(" > ")}"
-    end
-    exit 1
-  end
-  data = payload["data"]
-end
-
-search = "is:pr author:@me state:open"
-options[:repos].each { |nwo| search << " repo:#{nwo}" }
-
-pull_request_data = query_request(query: <<-GQL, variables: { search: search })
-  query($search: String!) {
-    search(query: $search, first: 30, type: ISSUE) {
-      nodes {
-        ... on PullRequest {
-          number
-          baseRepository {
-            name
-            owner {
-              login
-            }
-          }
-          isDraft
-        }
-      }
-    }
-  }
-GQL
-
-pull_requests = pull_request_data["search"]["nodes"].flat_map do |node|
-  next [] if node["isDraft"]
-
-  [PullRequest.new(
-    node["baseRepository"]["owner"]["login"],
-    node["baseRepository"]["name"],
-    node["number"]
-  )]
-end
-
 class Status
   def initialize(is_required, url)
     @is_required = is_required
@@ -249,6 +191,64 @@ class ContextStatus < Status
   end
 end
 
+def query_request(query:, variables:)
+  request = Net::HTTP::Post.new(GRAPHQL_URI, "Authorization": "bearer #{TOKEN}", "Content-Type": "application/json")
+  request.body = { query: query, variables: variables }.to_json
+  response = Net::HTTP.start(GRAPHQL_URI.hostname, GRAPHQL_URI.port, use_ssl: GRAPHQL_URI.scheme == "https") do |http|
+    http.request(request)
+  end
+
+  if response.code != "200"
+    $stderr.puts "Unable to query GraphQL API: #{response.message}"
+    exit 1
+  end
+
+  payload = JSON.parse(response.body)
+
+  if payload["errors"]&.any?
+    $stderr.puts "The GraphQL query encountered errors:"
+    payload["errors"].each do |error|
+      $stderr.puts "\n- #{error["message"]}"
+      $stderr.puts "  type: #{error["type"]}"
+      $stderr.puts "  path: #{error["path"].join(" > ")}"
+    end
+    exit 1
+  end
+  data = payload["data"]
+end
+
+search = "is:pr author:@me state:open"
+options[:repos].each { |nwo| search << " repo:#{nwo}" }
+
+pull_request_data = query_request(query: <<-GQL, variables: { search: search })
+  query($search: String!) {
+    search(query: $search, first: 30, type: ISSUE) {
+      nodes {
+        ... on PullRequest {
+          number
+          baseRepository {
+            name
+            owner {
+              login
+            }
+          }
+          isDraft
+        }
+      }
+    }
+  }
+GQL
+
+pull_requests = pull_request_data["search"]["nodes"].flat_map do |node|
+  next [] if node["isDraft"]
+
+  [PullRequest.new(
+    node["baseRepository"]["owner"]["login"],
+    node["baseRepository"]["name"],
+    node["number"]
+  )]
+end
+
 def query_pull_request_status(pull_request)
   q = <<-GQL
     query($owner: String!, $name: String!, $number: Int!) {
@@ -301,7 +301,7 @@ def query_pull_request_status(pull_request)
 
   rollup = data["repository"]["pullRequest"]["commits"]["nodes"][0]["commit"]["statusCheckRollup"]
   return [] unless rollup
-  
+
   rollup["contexts"]["nodes"].flat_map do |context|
     case context["__typename"]
     when "CheckRun"
@@ -360,7 +360,11 @@ if options[:wait]
       puts `clear`
       puts Time.now.strftime("\n⌚️ %I:%M:%S\n")
     end
-    sleep options[:delay] if pull_requests.any?(&:pending?)
+    if pull_requests.any?(&:pending?)
+      sleep options[:delay] 
+    else
+      puts
+    end
   end
 else
   report(pull_requests, verbose: options[:verbose])
