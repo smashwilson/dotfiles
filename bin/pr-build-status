@@ -62,12 +62,13 @@ end
 GRAPHQL_URI = URI("https://api.github.com/graphql")
 
 class PullRequest
-  def initialize(owner, name, number, title, url)
+  def initialize(owner, name, number, title, url, is_draft)
     @owner = owner
     @name = name
     @number = number
     @title = title
     @url = url
+    @draft = is_draft
     @latest_statuses = []
     @pending = true
   end
@@ -76,6 +77,10 @@ class PullRequest
 
   def pending?
     @pending
+  end
+
+  def draft?
+    @draft
   end
 
   def accept_statuses(statuses)
@@ -233,6 +238,7 @@ pull_request_data = query_request(query: <<-GQL, variables: { search: search })
     search(query: $search, first: 30, type: ISSUE) {
       nodes {
         ... on PullRequest {
+          isDraft
           number
           title
           baseRepository {
@@ -254,7 +260,8 @@ pull_requests = pull_request_data["search"]["nodes"].map do |node|
     node["baseRepository"]["name"],
     node["number"],
     node["title"],
-    node["url"]
+    node["url"],
+    node["isDraft"],
   )
 end
 
@@ -345,6 +352,13 @@ def report(pull_requests, verbose:)
 
   pull_requests.each do |pull_request|
     statuses = pull_request.latest_statuses
+
+    prefix = if pull_request.draft?
+      "\e[1;30m[DRAFT]\e[0m "
+    else
+      ""
+    end
+
     suffix = if pull_request.pending?
       "⏳ [#{statuses.count(&:completed?)} / #{statuses.size}]"
     elsif statuses.any?(&:failed?)
@@ -355,7 +369,7 @@ def report(pull_requests, verbose:)
 
     puts
     puts "\e[4m#{pull_request.url}\e[0m"
-    puts "\e[1m#{pull_request.title}\e[0m - #{suffix}"
+    puts "#{prefix}\e[1m#{pull_request.title}\e[0m - #{suffix}"
     statuses.each do |status|
       next if (status.succeeded? || status.neutral?) && !verbose
 
