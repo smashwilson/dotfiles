@@ -359,6 +359,13 @@ def report(pull_requests, verbose:)
       ""
     end
 
+    title_color = if !pull_request.pending? && statuses.none?(&:failed?)
+      # Ready
+      "\e[1;32m"
+    else
+      "\e[1m"
+    end
+
     suffix = if pull_request.pending?
       "⏳ [#{statuses.count(&:completed?)} / #{statuses.size}]"
     elsif statuses.any?(&:failed?)
@@ -369,7 +376,7 @@ def report(pull_requests, verbose:)
 
     puts
     puts "\e[4m#{pull_request.url}\e[0m"
-    puts "#{prefix}\e[1m#{pull_request.title}\e[0m - #{suffix}"
+    puts "#{prefix}#{title_color}#{pull_request.title}\e[0m - #{suffix}"
     statuses.each do |status|
       next if (status.succeeded? || status.neutral?) && !verbose
 
