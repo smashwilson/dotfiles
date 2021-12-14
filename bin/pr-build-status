@@ -354,7 +354,7 @@ def report(pull_requests, verbose:)
     statuses = pull_request.latest_statuses
 
     prefix = if pull_request.draft?
-      "\e[1;30m[DRAFT]\e[0m "
+      "\e[1;35m[DRAFT]\e[0m "
     else
       ""
     end
