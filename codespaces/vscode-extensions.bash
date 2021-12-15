@@ -4,7 +4,6 @@
 
 if [ "${CODESPACES:-}" = "true" ]; then
   code \
-    --install-extension eamodio.gitlens \
     --install-extension flesler.url-encode \
     >&/dev/null
 fi
