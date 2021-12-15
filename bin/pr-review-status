@@ -137,7 +137,7 @@ data["search"]["nodes"].each do |pull_request|
   next if approval_count + pending_count + request_count == 0
 
   total_count = request_count + pending_count + approval_count
-  ready = approval_count == total_count
+  ready = approval_count == total_count && latest_status.values.include?("APPROVED")
 
   title_color = if approval_count == total_count
     # Ready
