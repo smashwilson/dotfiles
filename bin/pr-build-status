@@ -377,10 +377,24 @@ def report(pull_requests, verbose:)
     puts
     puts "\e[4m#{pull_request.url}\e[0m"
     puts "#{prefix}#{title_color}#{pull_request.title}\e[0m - #{suffix}"
-    statuses.each do |status|
-      next if (status.succeeded? || status.neutral?) && !verbose
 
-      puts "  #{status.emoji} #{status.summarize}"
+    included_statuses = statuses.select { |status| verbose || status.pending? || status.failed? }
+    visible_statuses = included_statuses.first(15)
+    hidden_statuses = statuses - visible_statuses
+
+    visible_statuses.each { |status| puts "  #{status.emoji} #{status.summarize}" }
+    if hidden_statuses.any?
+      pending_count = hidden_statuses.count(&:pending?)
+      failed_count = hidden_statuses.count(&:failed?)
+      succeeded_count = hidden_statuses.count(&:succeeded?)
+      neutral_count = hidden_statuses.count(&:neutral?)
+
+      parts = []
+      parts << "#{pending_count} pending" if pending_count > 0
+      parts << "#{failed_count} failed" if failed_count > 0
+      parts << "#{succeeded_count} succeeded" if succeeded_count > 0
+      parts << "#{neutral_count} neutral" if neutral_count > 0
+      puts "  [+ #{parts.join(" ")}]"
     end
   end
 end
