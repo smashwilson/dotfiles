@@ -265,9 +265,9 @@ pull_requests = pull_request_data["search"]["nodes"].map do |node|
   )
 end
 
-def query_pull_request_status(pull_request)
+def query_pull_request_status(pull_request, cursor: nil)
   q = <<-GQL
-    query($owner: String!, $name: String!, $number: Int!) {
+    query($owner: String!, $name: String!, $number: Int!, $cursor: String) {
       repository(owner: $owner, name: $name) {
         pullRequest(number: $number) {
           commits(last: 1) {
@@ -275,7 +275,11 @@ def query_pull_request_status(pull_request)
               commit {
                 statusCheckRollup {
                   state
-                  contexts(first: 100) {
+                  contexts(first: 100, after: $cursor) {
+                    pageInfo {
+                      endCursor
+                      hasNextPage
+                    }
                     nodes {
                       __typename
                       ... on CheckRun {
@@ -313,12 +317,13 @@ def query_pull_request_status(pull_request)
     owner: pull_request.owner,
     name: pull_request.name,
     number: pull_request.number.to_i,
+    cursor: cursor
   })
 
   rollup = data["repository"]["pullRequest"]["commits"]["nodes"][0]["commit"]["statusCheckRollup"]
   return [] unless rollup
 
-  rollup["contexts"]["nodes"].flat_map do |context|
+  statuses = rollup["contexts"]["nodes"].flat_map do |context|
     case context["__typename"]
     when "CheckRun"
       [CheckRunStatus.new(
@@ -340,6 +345,12 @@ def query_pull_request_status(pull_request)
       []
     end
   end
+
+  page_info = rollup["contexts"]["pageInfo"]
+  if page_info["hasNextPage"]
+    statuses += query_pull_request_status(pull_request, cursor: page_info["endCursor"])
+  end
+  statuses
 end
 
 def report(pull_requests, verbose:)
