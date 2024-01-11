@@ -2,8 +2,9 @@
 # Interpolated in script/setup.
 export DOTFILES="__DOTFILES_ROOT__"
 
-# Add bin/ scripts
-export PATH="${HOME}/bin:./bin:${DOTFILES}/bin:${HOME}/.rbenv/bin:${HOME}/go/bin:${PATH}"
+# Path
+
+export PATH="${HOME}/bin:./bin:${DOTFILES}/bin:/opt/homebrew/bin:${HOME}/.rbenv/bin:${PATH}"
 
 # Path to your oh-my-zsh installation.
 export ZSH="${HOME}/.oh-my-zsh"
