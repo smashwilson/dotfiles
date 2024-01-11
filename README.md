@@ -11,12 +11,10 @@ Run this:
 ```sh
 git clone https://github.com/smashwilson/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
-script/bootstrap
+script/setup
 ```
 
-This will symlink the appropriate files in `.dotfiles` to your home directory,
-install Ansible, and run a playbook that sets up some most-used tooling.
-Everything is configured and tweaked within `~/.dotfiles`.
+This will symlink the appropriate files in `.dotfiles` to your home directory. Everything is configured and tweaked within `~/.dotfiles`.
 
 ## components
 
