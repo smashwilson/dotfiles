@@ -4,9 +4,9 @@
 
 if [ "${CODESPACES:-}" = "true" ]; then
   if has code; then
-    export EDITOR=code
+    export EDITOR="code --wait"
   fi
   if has code-insiders; then
-    export EDITOR=code-insiders
+    export EDITOR="code-insiders --wait"
   fi
 fi
