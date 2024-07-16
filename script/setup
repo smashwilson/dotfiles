@@ -26,6 +26,7 @@ setup_gitconfig () {
     git config --global user.name "Ash Wilson"
     git config --global user.email "smashwilson@github.com"
     git config --global merge.conflictstyle diff3
+    git config --global core.pager "less -F"
     return
   fi
 
